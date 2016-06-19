@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>resources/images/global/icon.ico</file>
+        <file>resources/images/global/icon.jpg</file>
+        <file>resources/images/global/icon.rc</file>
+        <file alias="font-global">resources/fonts/global.ttf</file>
+    </qresource>
+</RCC>

@@ -28,7 +28,7 @@ private:
     Layer *layer;
     Ui::Browser *ui;
 
-    std::vector<View *> vectorViews;
+    std::vector<View *> viewVector;
 
 private slots:
     void init_view();

@@ -13,38 +13,38 @@ class Ui_Browser
 {
 public:
     QProgressBar *progressBar;
-    QVBoxLayout *layoutMain;
+    QVBoxLayout *mainLayout;
 
     void setupUi(QWidget *Browser)
     {
-        QBrush brBase(QColor(10, 10, 10, 255));
-        QBrush brWhite(QColor(255, 255, 255, 255));
-        QBrush brBlack(QColor(0, 0, 0, 255));
+        QBrush baseBrush(QColor(10, 10, 10, 255));
+        QBrush whiteBrush(QColor(255, 255, 255, 255));
+        QBrush blackBrush(QColor(0, 0, 0, 255));
 
         QPalette p;
-        p.setBrush(QPalette::Active, QPalette::Base, brBase);
-        p.setBrush(QPalette::Active, QPalette::Window, brBase);
-        p.setBrush(QPalette::Active, QPalette::WindowText, brWhite);
-        p.setBrush(QPalette::Active, QPalette::Text, brWhite);
-        p.setBrush(QPalette::Active, QPalette::Highlight, brBlack);
-        p.setBrush(QPalette::Active, QPalette::Button, brBase);
-        p.setBrush(QPalette::Active, QPalette::ButtonText, brWhite);
-        p.setBrush(QPalette::Disabled, QPalette::Base, brBase);
-        p.setBrush(QPalette::Disabled, QPalette::Window, brBase);
-        p.setBrush(QPalette::Disabled, QPalette::WindowText, brBlack);
-        p.setBrush(QPalette::Disabled, QPalette::Text, brBlack);
-        p.setBrush(QPalette::Disabled, QPalette::Highlight, brBase);
-        p.setBrush(QPalette::Disabled, QPalette::Button, brBase);
-        p.setBrush(QPalette::Disabled, QPalette::ButtonText, brBlack);
+        p.setBrush(QPalette::Active, QPalette::Base, baseBrush);
+        p.setBrush(QPalette::Active, QPalette::Window, baseBrush);
+        p.setBrush(QPalette::Active, QPalette::WindowText, whiteBrush);
+        p.setBrush(QPalette::Active, QPalette::Text, whiteBrush);
+        p.setBrush(QPalette::Active, QPalette::Highlight, blackBrush);
+        p.setBrush(QPalette::Active, QPalette::Button, baseBrush);
+        p.setBrush(QPalette::Active, QPalette::ButtonText, whiteBrush);
+        p.setBrush(QPalette::Disabled, QPalette::Base, baseBrush);
+        p.setBrush(QPalette::Disabled, QPalette::Window, baseBrush);
+        p.setBrush(QPalette::Disabled, QPalette::WindowText, blackBrush);
+        p.setBrush(QPalette::Disabled, QPalette::Text, blackBrush);
+        p.setBrush(QPalette::Disabled, QPalette::Highlight, baseBrush);
+        p.setBrush(QPalette::Disabled, QPalette::Button, baseBrush);
+        p.setBrush(QPalette::Disabled, QPalette::ButtonText, blackBrush);
 
-        QString styleProgressBar;
-        styleProgressBar = "QProgressBar { background-color: rgb(10, 10, 10); \
+        QString progressBarStyle;
+        progressBarStyle = "QProgressBar { background-color: rgb(10, 10, 10); \
                             border: 0px; }"
                            "QProgressBar::chunk { background-color: rgb(80, 80, 80); \
                             width: 1px; }";
 
         progressBar = new QProgressBar(Browser);
-        progressBar->setStyleSheet(styleProgressBar);
+        progressBar->setStyleSheet(progressBarStyle);
         progressBar->setFixedHeight(5);
         progressBar->setMinimum(0);
         progressBar->setMaximum(100);
@@ -52,35 +52,35 @@ public:
         progressBar->setTextVisible(false);
         progressBar->setHidden(true);
 
-        layoutMain = new QVBoxLayout(Browser);
-        layoutMain->setSpacing(0);
-        layoutMain->setMargin(0);
+        mainLayout = new QVBoxLayout(Browser);
+        mainLayout->setSpacing(0);
+        mainLayout->setMargin(0);
 
         Browser->setPalette(p);
-        Browser->setLayout(layoutMain);
+        Browser->setLayout(mainLayout);
     }
 };
 
 class Ui_View
 {
 public:
-    QWidget *widgetLayer;
+    QWidget *showWidget;
 
     void setupUi(QWebEngineView *View)
     {
-        QBrush brTransparent(QColor(45, 0, 80, 255));
+        QBrush transparentBrush(QColor(45, 0, 80, 255));
 
         QPalette p;
-        p.setBrush(QPalette::Active, QPalette::Base, brTransparent);
-        p.setBrush(QPalette::Active, QPalette::Window, brTransparent);
+        p.setBrush(QPalette::Active, QPalette::Base, transparentBrush);
+        p.setBrush(QPalette::Active, QPalette::Window, transparentBrush);
 
-        widgetLayer = new QWidget;
-        widgetLayer->setPalette(p);
-        widgetLayer->setFixedSize(300, 300); // TODO: %
-        widgetLayer->setAutoFillBackground(true);
-        //widgetLayer->setParent(View);
-        //widgetLayer->setHidden(true);
-        //widgetLayer->show();
+        showWidget = new QWidget;
+        showWidget->setPalette(p);
+        showWidget->setFixedSize(300, 300); // TODO: %
+        showWidget->setAutoFillBackground(true);
+        //showWidget->setParent(View);
+        //showWidget->setHidden(true);
+        //showWidget->show();
 
         View->page()->setBackgroundColor(QColor(10, 10, 10));
     }
@@ -89,8 +89,8 @@ public:
 class Ui_Layer
 {
 public:
-    QWidget *widgetDarkLayer;
-    QLineEdit *lineEditUrl;
+    QWidget *tabWidget;
+    QLineEdit *urlEdit;
     QVBoxLayout *layout;
     QGridLayout *gridLayout;
 
@@ -101,30 +101,30 @@ public:
         f.setCapitalization(QFont::AllUppercase);
         f.setBold(true);
 
-        QBrush brBase(QColor(0, 0, 0, 180));
-        QBrush brWhite(QColor(255, 255, 255, 255));
-        QBrush brBlack(QColor(0, 0, 0, 255));
-        QBrush brTransparent(QColor(0, 0, 0, 0));
+        QBrush baseBrush(QColor(0, 0, 0, 180));
+        QBrush whiteBrush(QColor(255, 255, 255, 255));
+        QBrush blackBrush(QColor(0, 0, 0, 255));
+        QBrush transparentBrush(QColor(0, 0, 0, 0));
 
         QPalette p;
-        p.setBrush(QPalette::Active, QPalette::Base, brTransparent);
-        p.setBrush(QPalette::Active, QPalette::Window, brTransparent);
-        p.setBrush(QPalette::Active, QPalette::WindowText, brWhite);
-        p.setBrush(QPalette::Active, QPalette::Text, brWhite);
-        p.setBrush(QPalette::Active, QPalette::Highlight, brBlack);
-        p.setBrush(QPalette::Active, QPalette::Button, brTransparent);
-        p.setBrush(QPalette::Active, QPalette::ButtonText, brWhite);
-        p.setBrush(QPalette::Disabled, QPalette::Base, brTransparent);
-        p.setBrush(QPalette::Disabled, QPalette::Window, brTransparent);
-        p.setBrush(QPalette::Disabled, QPalette::WindowText, brBlack);
-        p.setBrush(QPalette::Disabled, QPalette::Text, brBlack);
-        p.setBrush(QPalette::Disabled, QPalette::Highlight, brTransparent);
-        p.setBrush(QPalette::Disabled, QPalette::Button, brTransparent);
-        p.setBrush(QPalette::Disabled, QPalette::ButtonText, brBlack);
+        p.setBrush(QPalette::Active, QPalette::Base, transparentBrush);
+        p.setBrush(QPalette::Active, QPalette::Window, transparentBrush);
+        p.setBrush(QPalette::Active, QPalette::WindowText, whiteBrush);
+        p.setBrush(QPalette::Active, QPalette::Text, whiteBrush);
+        p.setBrush(QPalette::Active, QPalette::Highlight, blackBrush);
+        p.setBrush(QPalette::Active, QPalette::Button, transparentBrush);
+        p.setBrush(QPalette::Active, QPalette::ButtonText, whiteBrush);
+        p.setBrush(QPalette::Disabled, QPalette::Base, transparentBrush);
+        p.setBrush(QPalette::Disabled, QPalette::Window, transparentBrush);
+        p.setBrush(QPalette::Disabled, QPalette::WindowText, blackBrush);
+        p.setBrush(QPalette::Disabled, QPalette::Text, blackBrush);
+        p.setBrush(QPalette::Disabled, QPalette::Highlight, transparentBrush);
+        p.setBrush(QPalette::Disabled, QPalette::Button, transparentBrush);
+        p.setBrush(QPalette::Disabled, QPalette::ButtonText, blackBrush);
 
-        QPalette pDark;
-        pDark.setBrush(QPalette::Active, QPalette::Base, brBase);
-        pDark.setBrush(QPalette::Active, QPalette::Window, brBase);
+        QPalette tabP;
+        tabP.setBrush(QPalette::Active, QPalette::Base, baseBrush);
+        tabP.setBrush(QPalette::Active, QPalette::Window, baseBrush);
 
         QString styleEditUrl;
         styleEditUrl = "QLineEdit { color: rgb(255, 255, 255); \
@@ -132,25 +132,25 @@ public:
                         selection-background-color: rgba(80, 80, 80, 100); \
                         border: 0px; }";
 
-        widgetDarkLayer = new QWidget;
-        widgetDarkLayer->setPalette(pDark);
-        widgetDarkLayer->setFixedSize(1920, 1080); // TODO: %
-        widgetDarkLayer->setAutoFillBackground(true);
-        widgetDarkLayer->setParent(Layer);
-        widgetDarkLayer->setHidden(true);
+        tabWidget = new QWidget;
+        tabWidget->setPalette(tabP);
+        tabWidget->setFixedSize(1920, 1080); // TODO: %
+        tabWidget->setAutoFillBackground(true);
+        tabWidget->setParent(Layer);
+        tabWidget->setHidden(true);
 
-        lineEditUrl = new QLineEdit(Layer);
-        lineEditUrl->setFont(f);
-        lineEditUrl->setStyleSheet(styleEditUrl);
-        lineEditUrl->setMinimumWidth(1920); // TODO: %
-        lineEditUrl->setAlignment(Qt::AlignCenter);
+        urlEdit = new QLineEdit(Layer);
+        urlEdit->setFont(f);
+        urlEdit->setStyleSheet(styleEditUrl);
+        urlEdit->setMinimumWidth(1920); // TODO: %
+        urlEdit->setAlignment(Qt::AlignCenter);
 
         gridLayout = new QGridLayout;
 
         layout = new QVBoxLayout(Layer);
         layout->setMargin(0);
         layout->addSpacing(-1); // TODO: %
-        layout->addWidget(lineEditUrl, Qt::AlignTop, Qt::AlignHCenter);
+        layout->addWidget(urlEdit, Qt::AlignTop, Qt::AlignHCenter);
         layout->addLayout(gridLayout);
         layout->addStretch(1);
 

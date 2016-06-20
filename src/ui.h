@@ -96,12 +96,12 @@ public:
     void setupUi(QWidget *Layer)
     {
         QFont f(":/font-global");
-        f.setPointSize(14); // TODO: %
+        f.setPointSize(12); // TODO: %
         f.setCapitalization(QFont::AllUppercase);
         f.setBold(true);
 
         QBrush brBase(QColor(0, 0, 0, 180));
-        QBrush brBaseLineEditUrl(QColor(0, 0, 0, 30));
+        QBrush brBaseLineEditUrl(QColor(0, 0, 0, 50));
         QBrush brWhite(QColor(255, 255, 255, 255));
         QBrush brBlack(QColor(0, 0, 0, 255));
         QBrush brTransparent(QColor(0, 0, 0, 0));
@@ -146,7 +146,7 @@ public:
         lineEditUrl = new QLineEdit(Layer);
         lineEditUrl->setFont(f);
         lineEditUrl->setPalette(pLineEditUrl);
-        lineEditUrl->setMinimumWidth(500); // TODO: %
+        lineEditUrl->setMinimumWidth(1920); // TODO: %
         lineEditUrl->setAlignment(Qt::AlignCenter);
 
         gridLayout = new QGridLayout;

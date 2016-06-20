@@ -63,8 +63,24 @@ public:
 class Ui_View
 {
 public:
+    QWidget *widgetLayer;
+
     void setupUi(QWebEngineView *View)
     {
+        QBrush brTransparent(QColor(45, 0, 80, 255));
+
+        QPalette p;
+        p.setBrush(QPalette::Active, QPalette::Base, brTransparent);
+        p.setBrush(QPalette::Active, QPalette::Window, brTransparent);
+
+        widgetLayer = new QWidget;
+        widgetLayer->setPalette(p);
+        widgetLayer->setFixedSize(300, 300); // TODO: %
+        widgetLayer->setAutoFillBackground(true);
+        //widgetLayer->setParent(View);
+        //widgetLayer->setHidden(true);
+        //widgetLayer->show();
+
         View->page()->setBackgroundColor(QColor(10, 10, 10));
     }
 };
@@ -72,7 +88,7 @@ public:
 class Ui_Layer
 {
 public:
-    QWidget *widgetDark;
+    QWidget *widgetDarkLayer;
     QLineEdit *lineEditUrl;
     QVBoxLayout *layout;
     QGridLayout *gridLayout;
@@ -120,12 +136,12 @@ public:
         pLineEditUrl.setBrush(QPalette::Disabled, QPalette::Text, brBlack);
         pLineEditUrl.setBrush(QPalette::Disabled, QPalette::Highlight, brBaseLineEditUrl);
 
-        widgetDark = new QWidget;
-        widgetDark->setPalette(pDark);
-        widgetDark->setFixedSize(1920, 1080); // TODO: %
-        widgetDark->setAutoFillBackground(true);
-        widgetDark->setParent(Layer);
-        widgetDark->setHidden(true);
+        widgetDarkLayer = new QWidget;
+        widgetDarkLayer->setPalette(pDark);
+        widgetDarkLayer->setFixedSize(1920, 1080); // TODO: %
+        widgetDarkLayer->setAutoFillBackground(true);
+        widgetDarkLayer->setParent(Layer);
+        widgetDarkLayer->setHidden(true);
 
         lineEditUrl = new QLineEdit(Layer);
         lineEditUrl->setFont(f);

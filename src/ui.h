@@ -37,10 +37,11 @@ public:
         p.setBrush(QPalette::Disabled, QPalette::Button, brBase);
         p.setBrush(QPalette::Disabled, QPalette::ButtonText, brBlack);
 
-        QString styleProgressBar = "QProgressBar { background-color: rgb(10, 10, 10); \
-                                    border: 0px; }"
-                                   "QProgressBar::chunk { background-color: rgb(80, 80, 80); \
-                                    width: 1px; }";
+        QString styleProgressBar;
+        styleProgressBar = "QProgressBar { background-color: rgb(10, 10, 10); \
+                            border: 0px; }"
+                           "QProgressBar::chunk { background-color: rgb(80, 80, 80); \
+                            width: 1px; }";
 
         progressBar = new QProgressBar(Browser);
         progressBar->setStyleSheet(styleProgressBar);
@@ -95,13 +96,12 @@ public:
 
     void setupUi(QWidget *Layer)
     {
-        QFont f(":/font-global");
+        QFont f("helvetica");
         f.setPointSize(12); // TODO: %
         f.setCapitalization(QFont::AllUppercase);
         f.setBold(true);
 
         QBrush brBase(QColor(0, 0, 0, 180));
-        QBrush brBaseLineEditUrl(QColor(0, 0, 0, 50));
         QBrush brWhite(QColor(255, 255, 255, 255));
         QBrush brBlack(QColor(0, 0, 0, 255));
         QBrush brTransparent(QColor(0, 0, 0, 0));
@@ -126,15 +126,11 @@ public:
         pDark.setBrush(QPalette::Active, QPalette::Base, brBase);
         pDark.setBrush(QPalette::Active, QPalette::Window, brBase);
 
-        QPalette pLineEditUrl;
-        pLineEditUrl.setBrush(QPalette::Active, QPalette::Base, brBaseLineEditUrl);
-        pLineEditUrl.setBrush(QPalette::Active, QPalette::Window, brBaseLineEditUrl);
-        pLineEditUrl.setBrush(QPalette::Active, QPalette::Text, brWhite);
-        pLineEditUrl.setBrush(QPalette::Active, QPalette::Highlight, brTransparent);
-        pLineEditUrl.setBrush(QPalette::Disabled, QPalette::Base, brBaseLineEditUrl);
-        pLineEditUrl.setBrush(QPalette::Disabled, QPalette::Window, brBaseLineEditUrl);
-        pLineEditUrl.setBrush(QPalette::Disabled, QPalette::Text, brBlack);
-        pLineEditUrl.setBrush(QPalette::Disabled, QPalette::Highlight, brBaseLineEditUrl);
+        QString styleEditUrl;
+        styleEditUrl = "QLineEdit { color: rgb(255, 255, 255); \
+                        background: rgba(0, 0, 0, 50); \
+                        selection-background-color: rgba(80, 80, 80, 100); \
+                        border: 0px; }";
 
         widgetDarkLayer = new QWidget;
         widgetDarkLayer->setPalette(pDark);
@@ -145,7 +141,7 @@ public:
 
         lineEditUrl = new QLineEdit(Layer);
         lineEditUrl->setFont(f);
-        lineEditUrl->setPalette(pLineEditUrl);
+        lineEditUrl->setStyleSheet(styleEditUrl);
         lineEditUrl->setMinimumWidth(1920); // TODO: %
         lineEditUrl->setAlignment(Qt::AlignCenter);
 

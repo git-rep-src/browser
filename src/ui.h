@@ -1,6 +1,8 @@
 #ifndef UI_H
 #define UI_H
 
+#include "minipagebutton.h"
+
 #include <QWebEngineView>
 #include <QLineEdit>
 #include <QProgressBar>
@@ -64,23 +66,21 @@ public:
 class Ui_View
 {
 public:
-    QWidget *showWidget;
+    MiniPageButton *miniPageButton;
 
     void setupUi(QWebEngineView *View)
     {
-        QBrush transparentBrush(QColor(45, 0, 80, 255));
+        QBrush transparentBrush(QColor(0, 0, 0, 0));
 
         QPalette p;
         p.setBrush(QPalette::Active, QPalette::Base, transparentBrush);
         p.setBrush(QPalette::Active, QPalette::Window, transparentBrush);
 
-        showWidget = new QWidget;
-        showWidget->setPalette(p);
-        showWidget->setFixedSize(300, 300); // TODO: %
-        showWidget->setAutoFillBackground(true);
-        //showWidget->setParent(View);
-        //showWidget->setHidden(true);
-        //showWidget->show();
+        miniPageButton = new MiniPageButton;
+        miniPageButton->setPalette(p);
+        miniPageButton->setFixedSize(400, 300); // TODO: %
+        miniPageButton->setAutoFillBackground(true);
+        miniPageButton->setHidden(true);
 
         View->page()->setBackgroundColor(QColor(10, 10, 10));
     }
@@ -97,11 +97,11 @@ public:
     void setupUi(QWidget *Layer)
     {
         QFont f("helvetica");
-        f.setPointSize(12); // TODO: %
+        f.setPointSize(14); // TODO: %
         f.setCapitalization(QFont::AllUppercase);
         f.setBold(true);
 
-        QBrush baseBrush(QColor(0, 0, 0, 180));
+        QBrush baseBrush(QColor(0, 0, 0, 230));
         QBrush whiteBrush(QColor(255, 255, 255, 255));
         QBrush blackBrush(QColor(0, 0, 0, 255));
         QBrush transparentBrush(QColor(0, 0, 0, 0));
@@ -151,6 +151,7 @@ public:
         layout->setMargin(0);
         layout->addSpacing(-1); // TODO: %
         layout->addWidget(urlEdit, Qt::AlignTop, Qt::AlignHCenter);
+        layout->addSpacing(50); // TODO: %
         layout->addLayout(gridLayout);
         layout->addStretch(1);
 

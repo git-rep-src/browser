@@ -7,6 +7,7 @@ Browser::Browser(QWidget *parent)
     , ui(new Ui::Browser)
 {
     ui->setupUi(this);
+
     this->installEventFilter(this);
 
     init_view();
@@ -28,15 +29,18 @@ void Browser::init_view()
 {
     view = new View;
     QObject::connect(view, &View::loadStarted, [&] { ui->progressBar->show(); });
-    QObject::connect(view, &View::loadProgress, [&] (int p){ ui->progressBar->setValue(p); });
+    QObject::connect(view, &View::loadProgress, [&] (int p) { ui->progressBar->setValue(p); });
     QObject::connect(view, &View::loadFinished, [&] { ui->progressBar->hide(); });
 
     viewVector.push_back(view);
-    if (viewVector.size() > 1) {
+    if (viewVector.size() > 1) { // FIX: NO LOOP.
         for (uint i = 1; i < viewVector.size(); i++) {
             viewVector[i - 1]->setMaximumSize(400, 300); // TODO: %
             viewVector[i - 1]->setZoomFactor(0.40);
             layer->get_ui_object()->gridLayout->addWidget(viewVector[i -1], 0, i, Qt::AlignTop | Qt::AlignLeft);
+            viewVector[i - 1]->get_ui_object()->miniPageButton->setParent(viewVector[i - 1]);
+            viewVector[i - 1]->get_ui_object()->miniPageButton->show();
+            QObject::connect(viewVector[i - 1]->get_ui_object()->miniPageButton, &MiniPageButton::clicked, [&] { qDebug() << "CLICKED"; });
         }
     }
 
@@ -69,6 +73,7 @@ bool Browser::eventFilter(QObject *obj, QEvent *event)
 {
     if ((obj == this) && (event->type() == QEvent::KeyPress)) {
         QKeyEvent *key = static_cast<QKeyEvent *>(event);
+
         switch(key->key()) {
             case Qt::Key_Left:
                 view->back();

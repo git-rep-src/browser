@@ -7,13 +7,13 @@ SOURCES += src/main.cpp \
            src/browser.cpp \
            src/view.cpp \
            src/layer.cpp \
-           src/minipagebutton.cpp
+           src/buttonminiature.cpp
 
 HEADERS  += src/browser.h \
             src/view.h \
             src/layer.h \
             src/ui.h \
-            src/minipagebutton.h
+            src/buttonminiature.h
 
 RESOURCES = resources.qrc
 

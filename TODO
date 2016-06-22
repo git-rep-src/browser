@@ -1,0 +1,2 @@
+Browser::miniature_handler
+    Al reabrir una miniatura, layoutMiniature debe reacomodarlas automaticamente.

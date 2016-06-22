@@ -20,9 +20,6 @@ public slots:
 
 private:
     Ui::Layer *ui;
-
-//private slots:
-//    void resizeLineEditUrl();
 };
 
 #endif // LAYER_H

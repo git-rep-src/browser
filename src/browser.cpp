@@ -2,93 +2,114 @@
 
 Browser::Browser(QWidget *parent)
     : QWidget(parent)
-    , view(NULL)
-    , layer(NULL)
+    , pView(NULL)
+    , pLayer(NULL)
     , ui(new Ui::Browser)
 {
     ui->setupUi(this);
 
     this->installEventFilter(this);
 
-    init_view();
-    viewVector[0]->load_url("lamiradadelreplicante.com");
+    view();
+    vectorView[0]->load_url("lamiradadelreplicante.com");
     ui->mainLayout->addWidget(ui->progressBar);
 
-    init_layer();
+    layer();
 }
 
 Browser::~Browser()
 {
-    for (uint i = 1; i <= viewVector.size(); i++)
-        delete viewVector[i - 1];
-    delete layer;
+    for (uint i = 1; i <= vectorView.size(); i++)
+        delete vectorView[i - 1];
+    delete pLayer;
     delete ui;
 }
 
-void Browser::init_view()
+void Browser::view()
 {
-    view = new View;
-    QObject::connect(view, &View::loadStarted, [&] { ui->progressBar->show(); });
-    QObject::connect(view, &View::loadProgress, [&] (int p) { ui->progressBar->setValue(p); });
-    QObject::connect(view, &View::loadFinished, [&] { ui->progressBar->hide(); });
+    pView = new View;
+    QObject::connect(pView, &View::loadStarted, [&] { ui->progressBar->show(); });
+    QObject::connect(pView, &View::loadProgress, [&] (int p) { ui->progressBar->setValue(p); });
+    QObject::connect(pView, &View::loadFinished, [&] { ui->progressBar->hide(); });
 
-    viewVector.push_back(view);
-    if (viewVector.size() > 1) { // FIX: NO LOOP.
-        for (uint i = 1; i < viewVector.size(); i++) {
-            viewVector[i - 1]->setMaximumSize(400, 300); // TODO: %
-            viewVector[i - 1]->setZoomFactor(0.40);
-            layer->get_ui_object()->gridLayout->addWidget(viewVector[i -1], 0, i, Qt::AlignTop | Qt::AlignLeft);
-            viewVector[i - 1]->get_ui_object()->miniPageButton->setParent(viewVector[i - 1]);
-            viewVector[i - 1]->get_ui_object()->miniPageButton->show();
-            QObject::connect(viewVector[i - 1]->get_ui_object()->miniPageButton, &MiniPageButton::clicked, [&] { qDebug() << "CLICKED"; });
-        }
-    }
+    vectorView.push_back(pView);
+    if (vectorView.size() > 1)
+        miniature_handler();
 
-    ui->mainLayout->insertWidget(0, viewVector.back());
+    ui->mainLayout->insertWidget(0, vectorView.back());
+    currentView = (vectorView.size() - 1);
 }
 
-void Browser::init_layer()
+void Browser::layer()
 {
-    layer = new Layer;
-    layer->setParent(this);
+    pLayer = new Layer;
+    pLayer->setParent(this);
 }
 
-void Browser::show_layer()
+void Browser::layer_handle()
 {
-    if (layer->isHidden()) {
-        if (viewVector.size() > 1)
-            layer->get_ui_object()->tabWidget->show();
-        else
-            layer->get_ui_object()->tabWidget->hide();
-        layer->setParent(NULL);
-        layer->setParent(this);
-        layer->setVisible(true);
-        layer->get_ui_object()->urlEdit->setFocus();
+    if (pLayer->isHidden()) {
+        pLayer->setParent(NULL);
+        pLayer->setParent(this);
+        pLayer->setVisible(true);
+        pLayer->get_ui_object()->lineEditUrl->setFocus();
     } else {
-        layer->setHidden(true);
+        pLayer->setHidden(true);
     }
 }
 
-bool Browser::eventFilter(QObject *obj, QEvent *event)
+void Browser::miniature_handler(int min, bool open)
 {
-    if ((obj == this) && (event->type() == QEvent::KeyPress)) {
-        QKeyEvent *key = static_cast<QKeyEvent *>(event);
+    int vv = currentView;
+    if ((row == 5) && !open) {
+        row = 0;
+        ++col;
+    }
 
+    ui->mainLayout->removeWidget(vectorView[vv]);
+    vectorView[vv]->setMaximumSize(400, 250); // TODO: %
+    vectorView[vv]->setZoomFactor(0.40);
+    pLayer->get_ui_object()->layoutMiniatures->addWidget(vectorView[vv], col, row, Qt::AlignTop | Qt::AlignLeft);
+    vectorView[vv]->get_ui_object()->buttonMiniature->setParent(vectorView[vv]);
+    vectorView[vv]->get_ui_object()->buttonMiniature->show();
+    QObject::connect(vectorView[vv]->get_ui_object()->buttonMiniature, &ButtonMiniature::clicked, [=] {
+        vectorView[vv]->get_ui_object()->buttonMiniature->disconnect();
+        miniature_handler(vv, true);
+    });
+
+    if (open) {
+        vectorView[min]->get_ui_object()->buttonMiniature->hide();
+        vectorView[min]->get_ui_object()->buttonMiniature->setParent(NULL);
+        pLayer->get_ui_object()->layoutMiniatures->removeWidget(vectorView[min]);
+        vectorView[min]->setMaximumSize(1920, 1080); // TODO: %
+        vectorView[min]->setZoomFactor(1.0);
+        ui->mainLayout->insertWidget(0, vectorView[min]);
+        currentView = min;
+        layer_handle();
+    }
+
+    ++row;
+}
+
+bool Browser::eventFilter(QObject *o, QEvent *e)
+{
+    if ((o == this) && (e->type() == QEvent::KeyPress)) {
+        QKeyEvent *key = static_cast<QKeyEvent *>(e);
         switch(key->key()) {
             case Qt::Key_Left:
-                view->back();
+                pView->back();
                 break;
             case Qt::Key_Right:
-                view->forward();
+                pView->forward();
                 break;
             case Qt::Key_Return:
-                if (layer->isVisible()) {
+                if (pLayer->isVisible()) {
                     if (key->modifiers() == Qt::ShiftModifier)
-                        init_view();
-                    view->load_url(layer->get_ui_object()->urlEdit->text());
-                    show_layer();
+                        view();
+                    pView->load_url(pLayer->get_ui_object()->lineEditUrl->text());
+                    layer_handle();
                 } else {
-                    view->reload();
+                    pView->reload();
                 }
                 break;
             case Qt::Key_Q:
@@ -99,7 +120,7 @@ bool Browser::eventFilter(QObject *obj, QEvent *event)
                 break;
         }
         if (key->modifiers() == Qt::MetaModifier)
-            show_layer();
+            layer_handle();
     }
-    return QObject::eventFilter(obj, event);
+    return QObject::eventFilter(o, e);
 }

@@ -21,19 +21,23 @@ public:
     ~Browser();
 
 protected:
-    bool eventFilter(QObject *obj, QEvent *event);
+    bool eventFilter(QObject *o, QEvent *e);
 
 private:
-    View *view;
-    Layer *layer;
+    View *pView;
+    Layer *pLayer;
     Ui::Browser *ui;
 
-    std::vector<View *> viewVector;
+    int row = 0;
+    int col = 0;
+    int currentView = 0;
+    std::vector<View *> vectorView;
 
 private slots:
-    void init_view();
-    void init_layer();
-    void show_layer();
+    void view();
+    void layer();
+    void layer_handle();
+    void miniature_handler(int min = 0, bool open = false);
 };
 
 #endif // BROWSER_H

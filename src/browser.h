@@ -24,20 +24,23 @@ protected:
     bool eventFilter(QObject *o, QEvent *e);
 
 private:
-    View *pView;
-    Layer *pLayer;
+    View *view;
+    Layer *layer;
+
+    QUrl url;
+    std::vector<View *> views;
+
+    int row;
+    int col;
+    int current;
+
     Ui::Browser *ui;
 
-    int row = 0;
-    int col = 0;
-    int currentView = 0;
-    std::vector<View *> vectorView;
-
 private slots:
-    void view();
-    void layer();
-    void layer_handle();
-    void miniature_handler(int min = 0, bool open = false);
+    void create_view();
+    void create_layer();
+    void handler_view(int offset = 0, bool open = false);
+    void handler_layer();
 };
 
 #endif // BROWSER_H

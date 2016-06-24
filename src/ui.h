@@ -5,6 +5,7 @@
 
 #include <QWebEngineView>
 #include <QLineEdit>
+#include <QPushButton>
 #include <QProgressBar>
 #include <QHBoxLayout>
 #include <QGridLayout>
@@ -67,8 +68,9 @@ class Ui_View
 {
 public:
     ButtonMiniature *buttonMiniature;
+    QPushButton *buttonMiniatureClose;
 
-    void setupUi(QWebEngineView *View)
+    void setupUi()
     {
         QBrush brushTransparent(QColor(0, 0, 0, 0));
 
@@ -82,7 +84,9 @@ public:
         buttonMiniature->setAutoFillBackground(true);
         buttonMiniature->setHidden(true);
 
-        View->page()->setBackgroundColor(QColor(10, 10, 10));
+        buttonMiniatureClose = new QPushButton(QIcon(":/icon-close"), NULL);
+        buttonMiniatureClose->setParent(buttonMiniature);
+        buttonMiniatureClose->move(373, 0);
     }
 };
 
@@ -96,11 +100,11 @@ public:
     void setupUi(QWidget *Layer)
     {
         QFont f("helvetica");
-        f.setPointSize(18); // TODO: %
+        f.setPointSize(16); // TODO: %
         f.setCapitalization(QFont::AllUppercase);
         f.setBold(true);
 
-        QBrush brushBase(QColor(0, 0, 0, 240));
+        QBrush brushBase(QColor(80, 80, 80, 220));
         QBrush brushWhite(QColor(255, 255, 255, 255));
         QBrush brushBlack(QColor(0, 0, 0, 255));
 
@@ -122,14 +126,16 @@ public:
 
         QString styleLineEditUrl;
         styleLineEditUrl = "QLineEdit { color: rgb(255, 255, 255); \
-                            background: rgba(0, 0, 0, 0); \
-                            selection-background-color: rgba(80, 80, 80, 100); \
-                            border-radius: 20px; \
+                            background: rgba(40, 40, 40, 255); \
+                            selection-color: rgba(80, 80, 80, 255); \
+                            selection-background-color: rgba(0, 0, 0, 0); \
+                            border-radius: 12px; \
                             border: 0px; }";
 
         lineEditUrl = new QLineEdit(Layer);
         lineEditUrl->setFont(f);
         lineEditUrl->setStyleSheet(styleLineEditUrl);
+        lineEditUrl->setMinimumWidth(500);
         lineEditUrl->setAlignment(Qt::AlignCenter);
 
         layoutMiniatures = new QGridLayout;
@@ -138,7 +144,7 @@ public:
         layout->setMargin(10);
         layout->addSpacing(10); // TODO: %
         layout->addWidget(lineEditUrl, Qt::AlignTop, Qt::AlignHCenter);
-        layout->addSpacing(25); // TODO: %
+        layout->addStretch(1);
         layout->addLayout(layoutMiniatures);
         layout->addStretch(1);
 
@@ -146,7 +152,6 @@ public:
         Layer->setFixedSize(1920, 1080); // TODO: %
         Layer->setAutoFillBackground(true);
         Layer->setLayout(layout);
-        Layer->setHidden(true);
     }
 };
 

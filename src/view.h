@@ -19,7 +19,7 @@ public:
 
 public slots:
     Ui::View *get_ui_object() { return ui; }
-    void load_url(QString url);
+    void load_url(QUrl &url);
 
 private:
     Ui::View *ui;

@@ -5,7 +5,7 @@ Layer::Layer(QWidget *parent)
     , ui(new Ui::Layer)
 {
     ui->setupUi(this);
-    connect(ui->lineEditUrl, SIGNAL(textChanged(QString)), this, SLOT(resizeLineEditUrl()));
+    connect(ui->lineedit_url, SIGNAL(textChanged(QString)), this, SLOT(resizeLineEditUrl()));
 }
 
 Layer::~Layer()
@@ -17,10 +17,10 @@ void Layer::resizeLineEditUrl()
 {
     QFont f("", 0);
     QFontMetrics fm(f);
-    int pixelsWide = fm.width(ui->lineEditUrl->text());
-    if (pixelsWide > 180)
-        ui->lineEditUrl->setMinimumWidth(pixelsWide * 2.7);
+    int pixelsWide = fm.width(ui->lineedit_url->text());
+    if (pixelsWide > 160)
+        ui->lineedit_url->setMinimumWidth(pixelsWide * 2.9);
     else
-        ui->lineEditUrl->setMinimumWidth(500); // TODO: %
+        ui->lineedit_url->setMinimumWidth(500); // TODO: %
     this->adjustSize();
 }

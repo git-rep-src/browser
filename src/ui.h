@@ -5,6 +5,7 @@
 
 #include <QWebEngineView>
 #include <QLineEdit>
+#include <QLabel>
 #include <QPushButton>
 #include <QProgressBar>
 #include <QHBoxLayout>
@@ -15,140 +16,149 @@ QT_BEGIN_NAMESPACE
 class Ui_Browser
 {
 public:
-    QProgressBar *progressBar;
-    QVBoxLayout *mainLayout;
+    QProgressBar *progressbar;
+    QVBoxLayout *layout_main;
 
     void setupUi(QWidget *Browser)
     {
-        QBrush brushBase(QColor(10, 10, 10, 255));
-        QBrush brushWhite(QColor(255, 255, 255, 255));
-        QBrush brushBlack(QColor(0, 0, 0, 255));
+        QBrush brush_base(QColor(10, 10, 10, 255));
+        QBrush brush_white(QColor(255, 255, 255, 255));
+        QBrush brush_black(QColor(0, 0, 0, 255));
 
-        QPalette p;
-        p.setBrush(QPalette::Active, QPalette::Base, brushBase);
-        p.setBrush(QPalette::Active, QPalette::Window, brushBase);
-        p.setBrush(QPalette::Active, QPalette::WindowText, brushWhite);
-        p.setBrush(QPalette::Active, QPalette::Text, brushWhite);
-        p.setBrush(QPalette::Active, QPalette::Highlight, brushBlack);
-        p.setBrush(QPalette::Active, QPalette::Button, brushBase);
-        p.setBrush(QPalette::Active, QPalette::ButtonText, brushWhite);
-        p.setBrush(QPalette::Disabled, QPalette::Base, brushBase);
-        p.setBrush(QPalette::Disabled, QPalette::Window, brushBase);
-        p.setBrush(QPalette::Disabled, QPalette::WindowText, brushBlack);
-        p.setBrush(QPalette::Disabled, QPalette::Text, brushBlack);
-        p.setBrush(QPalette::Disabled, QPalette::Highlight, brushBase);
-        p.setBrush(QPalette::Disabled, QPalette::Button, brushBase);
-        p.setBrush(QPalette::Disabled, QPalette::ButtonText, brushBlack);
+        QPalette palette;
+        palette.setBrush(QPalette::Active, QPalette::Base, brush_base);
+        palette.setBrush(QPalette::Active, QPalette::Window, brush_base);
+        palette.setBrush(QPalette::Active, QPalette::WindowText, brush_white);
+        palette.setBrush(QPalette::Active, QPalette::Text, brush_white);
+        palette.setBrush(QPalette::Active, QPalette::Highlight, brush_black);
+        palette.setBrush(QPalette::Active, QPalette::Button, brush_base);
+        palette.setBrush(QPalette::Active, QPalette::ButtonText, brush_white);
+        palette.setBrush(QPalette::Disabled, QPalette::Base, brush_base);
+        palette.setBrush(QPalette::Disabled, QPalette::Window, brush_base);
+        palette.setBrush(QPalette::Disabled, QPalette::WindowText, brush_black);
+        palette.setBrush(QPalette::Disabled, QPalette::Text, brush_black);
+        palette.setBrush(QPalette::Disabled, QPalette::Highlight, brush_base);
+        palette.setBrush(QPalette::Disabled, QPalette::Button, brush_base);
+        palette.setBrush(QPalette::Disabled, QPalette::ButtonText, brush_black);
 
-        QString styleProgressBar;
-        styleProgressBar = "QProgressBar { background-color: rgb(10, 10, 10); \
+        QString style_progressbar;
+        style_progressbar = "QProgressBar { background-color: rgb(10, 10, 10); \
                             border: 0px; }"
                            "QProgressBar::chunk { background-color: rgb(80, 80, 80); \
                             width: 1px; }";
 
-        progressBar = new QProgressBar(Browser);
-        progressBar->setStyleSheet(styleProgressBar);
-        progressBar->setFixedHeight(5);
-        progressBar->setMinimum(0);
-        progressBar->setMaximum(100);
-        progressBar->setValue(0);
-        progressBar->setTextVisible(false);
-        progressBar->setHidden(true);
+        progressbar = new QProgressBar(Browser);
+        progressbar->setStyleSheet(style_progressbar);
+        progressbar->setFixedHeight(5);
+        progressbar->setMinimum(0);
+        progressbar->setMaximum(100);
+        progressbar->setValue(0);
+        progressbar->setTextVisible(false);
+        progressbar->setHidden(true);
 
-        mainLayout = new QVBoxLayout(Browser);
-        mainLayout->setSpacing(0);
-        mainLayout->setMargin(0);
+        layout_main = new QVBoxLayout(Browser);
+        layout_main->setSpacing(0);
+        layout_main->setMargin(0);
 
-        Browser->setPalette(p);
-        Browser->setLayout(mainLayout);
+        Browser->setPalette(palette);
+        Browser->setLayout(layout_main);
     }
 };
 
 class Ui_View
 {
 public:
-    ButtonMiniature *buttonMiniature;
-    QPushButton *buttonMiniatureClose;
+    ButtonMiniature *button_miniature;
+    QPushButton *button_miniature_close;
 
     void setupUi()
     {
-        QBrush brushTransparent(QColor(0, 0, 0, 0));
+        QBrush brush_transparent(QColor(0, 0, 0, 0));
 
-        QPalette p;
-        p.setBrush(QPalette::Active, QPalette::Base, brushTransparent);
-        p.setBrush(QPalette::Active, QPalette::Window, brushTransparent);
+        QPalette palette;
+        palette.setBrush(QPalette::Active, QPalette::Base, brush_transparent);
+        palette.setBrush(QPalette::Active, QPalette::Window, brush_transparent);
 
-        buttonMiniature = new ButtonMiniature;
-        buttonMiniature->setPalette(p);
-        buttonMiniature->setFixedSize(400, 300); // TODO: %
-        buttonMiniature->setAutoFillBackground(true);
-        buttonMiniature->setHidden(true);
+        button_miniature = new ButtonMiniature;
+        button_miniature->setPalette(palette);
+        button_miniature->setFixedSize(400, 300); // TODO: %
+        button_miniature->setAutoFillBackground(true);
+        button_miniature->setHidden(true);
 
-        buttonMiniatureClose = new QPushButton(QIcon(":/icon-close"), NULL);
-        buttonMiniatureClose->setParent(buttonMiniature);
-        buttonMiniatureClose->move(373, 0);
+        button_miniature_close = new QPushButton(QIcon(":/icon-close"), NULL);
+        button_miniature_close->setParent(button_miniature);
+        button_miniature_close->move(373, 0);
     }
 };
 
 class Ui_Layer
 {
 public:
-    QLineEdit *lineEditUrl;
-    QGridLayout *layoutMiniatures;
+    QLineEdit *lineedit_url;
+    QPixmap pixmap_ssl;
+    QPixmap pixmap_ssl_off;
+    QLabel  *label_ssl;
+    QGridLayout *layout_miniatures;
     QVBoxLayout *layout;
 
     void setupUi(QWidget *Layer)
     {
-        QFont f("helvetica");
-        f.setPointSize(16); // TODO: %
-        f.setCapitalization(QFont::AllUppercase);
-        f.setBold(true);
+        QFont font("helvetica");
+        font.setPointSize(16); // TODO: %
+        font.setCapitalization(QFont::AllUppercase);
+        font.setBold(true);
 
-        QBrush brushBase(QColor(80, 80, 80, 220));
-        QBrush brushWhite(QColor(255, 255, 255, 255));
-        QBrush brushBlack(QColor(0, 0, 0, 255));
+        QBrush brush_base(QColor(80, 80, 80, 220));
+        QBrush brush_white(QColor(255, 255, 255, 255));
+        QBrush brush_black(QColor(0, 0, 0, 255));
 
-        QPalette p;
-        p.setBrush(QPalette::Active, QPalette::Base, brushBase);
-        p.setBrush(QPalette::Active, QPalette::Window, brushBase);
-        p.setBrush(QPalette::Active, QPalette::WindowText, brushWhite);
-        p.setBrush(QPalette::Active, QPalette::Text, brushWhite);
-        p.setBrush(QPalette::Active, QPalette::Highlight, brushBlack);
-        p.setBrush(QPalette::Active, QPalette::Button, brushBase);
-        p.setBrush(QPalette::Active, QPalette::ButtonText, brushWhite);
-        p.setBrush(QPalette::Disabled, QPalette::Base, brushBase);
-        p.setBrush(QPalette::Disabled, QPalette::Window, brushBase);
-        p.setBrush(QPalette::Disabled, QPalette::WindowText, brushBlack);
-        p.setBrush(QPalette::Disabled, QPalette::Text, brushBlack);
-        p.setBrush(QPalette::Disabled, QPalette::Highlight, brushBlack);
-        p.setBrush(QPalette::Disabled, QPalette::Button, brushBase);
-        p.setBrush(QPalette::Disabled, QPalette::ButtonText, brushBlack);
+        QPalette palette;
+        palette.setBrush(QPalette::Active, QPalette::Base, brush_base);
+        palette.setBrush(QPalette::Active, QPalette::Window, brush_base);
+        palette.setBrush(QPalette::Active, QPalette::WindowText, brush_white);
+        palette.setBrush(QPalette::Active, QPalette::Text, brush_white);
+        palette.setBrush(QPalette::Active, QPalette::Highlight, brush_black);
+        palette.setBrush(QPalette::Active, QPalette::Button, brush_base);
+        palette.setBrush(QPalette::Active, QPalette::ButtonText, brush_white);
+        palette.setBrush(QPalette::Disabled, QPalette::Base, brush_base);
+        palette.setBrush(QPalette::Disabled, QPalette::Window, brush_base);
+        palette.setBrush(QPalette::Disabled, QPalette::WindowText, brush_black);
+        palette.setBrush(QPalette::Disabled, QPalette::Text, brush_black);
+        palette.setBrush(QPalette::Disabled, QPalette::Highlight, brush_black);
+        palette.setBrush(QPalette::Disabled, QPalette::Button, brush_base);
+        palette.setBrush(QPalette::Disabled, QPalette::ButtonText, brush_black);
 
-        QString styleLineEditUrl;
-        styleLineEditUrl = "QLineEdit { color: rgb(255, 255, 255); \
-                            background: rgba(40, 40, 40, 255); \
-                            selection-color: rgba(80, 80, 80, 255); \
-                            selection-background-color: rgba(0, 0, 0, 0); \
-                            border-radius: 12px; \
-                            border: 0px; }";
+        QString style_lineedit_url;
+        style_lineedit_url = "QLineEdit { color: rgb(255, 255, 255); \
+                              background: rgba(40, 40, 40, 255); \
+                              selection-color: rgba(80, 80, 80, 255); \
+                              selection-background-color: rgba(0, 0, 0, 0); \
+                              border-radius: 12px; \
+                              border: 0px; }";
 
-        lineEditUrl = new QLineEdit(Layer);
-        lineEditUrl->setFont(f);
-        lineEditUrl->setStyleSheet(styleLineEditUrl);
-        lineEditUrl->setMinimumWidth(500);
-        lineEditUrl->setAlignment(Qt::AlignCenter);
+        lineedit_url = new QLineEdit(Layer);
+        lineedit_url->setFont(font);
+        lineedit_url->setStyleSheet(style_lineedit_url);
+        lineedit_url->setMinimumWidth(500);
+        lineedit_url->setAlignment(Qt::AlignCenter);
 
-        layoutMiniatures = new QGridLayout;
+        pixmap_ssl.load(":/icon-ssl");
+        pixmap_ssl_off.load(":/icon-ssl-off");
+        label_ssl = new QLabel(lineedit_url);
+        label_ssl->setPixmap(pixmap_ssl_off);
+        label_ssl->move(8, 9);
+
+        layout_miniatures = new QGridLayout;
 
         layout = new QVBoxLayout(Layer);
         layout->setMargin(10);
         layout->addSpacing(10); // TODO: %
-        layout->addWidget(lineEditUrl, Qt::AlignTop, Qt::AlignHCenter);
+        layout->addWidget(lineedit_url, Qt::AlignTop, Qt::AlignHCenter);
         layout->addStretch(1);
-        layout->addLayout(layoutMiniatures);
+        layout->addLayout(layout_miniatures);
         layout->addStretch(1);
 
-        Layer->setPalette(p);
+        Layer->setPalette(palette);
         Layer->setFixedSize(1920, 1080); // TODO: %
         Layer->setAutoFillBackground(true);
         Layer->setLayout(layout);

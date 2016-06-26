@@ -1,6 +1,7 @@
 #ifndef VIEW_H
 #define VIEW_H
 
+#include "layer.h"
 #include "ui.h"
 
 #include <QWebEngineView>
@@ -14,12 +15,12 @@ class View : public QWebEngineView
     Q_OBJECT
 
 public:
-    explicit View(QWebEngineView *parent = 0);
+    explicit View(Ui::Browser *ui_browser, Layer *layer, QWebEngineView *parent = 0);
     ~View();
 
 public slots:
-    Ui::View *get_ui_object() { return ui; }
     void load_url(QUrl &url);
+    Ui::View *get_ui() { return ui; }
 
 private:
     Ui::View *ui;

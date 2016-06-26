@@ -4,7 +4,7 @@
 #include "buttonminiature.h"
 
 #include <QWebEngineView>
-#include <QLineEdit>
+#include <QTextEdit>
 #include <QLabel>
 #include <QPushButton>
 #include <QProgressBar>
@@ -41,11 +41,14 @@ public:
         palette.setBrush(QPalette::Disabled, QPalette::Button, brush_base);
         palette.setBrush(QPalette::Disabled, QPalette::ButtonText, brush_black);
 
-        QString style_progressbar;
-        style_progressbar = "QProgressBar { background-color: rgb(10, 10, 10); \
-                            border: 0px; }"
-                           "QProgressBar::chunk { background-color: rgb(80, 80, 80); \
-                            width: 1px; }";
+        QString style_progressbar = "QProgressBar { \
+                                         background-color: rgb(10, 10, 10); \
+                                         border: 0px; \
+                                    }"
+                                    "QProgressBar::chunk { \
+                                         background-color: rgb(80, 80, 80); \
+                                         width: 1px; \
+                                    }";
 
         progressbar = new QProgressBar(Browser);
         progressbar->setStyleSheet(style_progressbar);
@@ -95,7 +98,7 @@ public:
 class Ui_Layer
 {
 public:
-    QLineEdit *lineedit_url;
+    QTextEdit *text_url;
     QPixmap pixmap_ssl;
     QPixmap pixmap_ssl_off;
     QLabel  *label_ssl;
@@ -129,23 +132,30 @@ public:
         palette.setBrush(QPalette::Disabled, QPalette::Button, brush_base);
         palette.setBrush(QPalette::Disabled, QPalette::ButtonText, brush_black);
 
-        QString style_lineedit_url;
-        style_lineedit_url = "QLineEdit { color: rgb(255, 255, 255); \
-                              background: rgba(40, 40, 40, 255); \
-                              selection-color: rgba(80, 80, 80, 255); \
-                              selection-background-color: rgba(0, 0, 0, 0); \
-                              border-radius: 12px; \
-                              border: 0px; }";
+        QString style_text_url = "QTextEdit { \
+                                      color: rgb(255, 255, 255); \
+                                      background: rgba(40, 40, 40, 255); \
+                                      selection-color: rgba(80, 80, 80, 255); \
+                                      selection-background-color: rgba(0, 0, 0, 0); \
+                                      padding-left: 50px; \
+                                      padding-right: 50px; \
+                                      border-radius: 12px; \
+                                      border: 0px; \
+                                 }";
 
-        lineedit_url = new QLineEdit(Layer);
-        lineedit_url->setFont(font);
-        lineedit_url->setStyleSheet(style_lineedit_url);
-        lineedit_url->setMinimumWidth(500);
-        lineedit_url->setAlignment(Qt::AlignCenter);
+        text_url = new QTextEdit(Layer);
+        text_url->setFont(font);
+        text_url->setStyleSheet(style_text_url);
+        text_url->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        text_url->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        text_url->setLineWrapMode(QTextEdit::NoWrap);
+        text_url->setMinimumWidth(500);//
+        text_url->setMaximumHeight(32);//
+        text_url->setAlignment(Qt::AlignCenter);
 
         pixmap_ssl.load(":/icon-ssl");
         pixmap_ssl_off.load(":/icon-ssl-off");
-        label_ssl = new QLabel(lineedit_url);
+        label_ssl = new QLabel(text_url);
         label_ssl->setPixmap(pixmap_ssl_off);
         label_ssl->move(8, 9);
 
@@ -154,7 +164,7 @@ public:
         layout = new QVBoxLayout(Layer);
         layout->setMargin(10);
         layout->addSpacing(10); // TODO: %
-        layout->addWidget(lineedit_url, Qt::AlignTop, Qt::AlignHCenter);
+        layout->addWidget(text_url, Qt::AlignTop, Qt::AlignHCenter);
         layout->addStretch(1);
         layout->addLayout(layout_miniatures);
         layout->addStretch(1);

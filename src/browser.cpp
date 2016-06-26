@@ -11,9 +11,10 @@ Browser::Browser(QWidget *parent)
 {
     ui->setupUi(this);
 
-    this->installEventFilter(this);
-
     layer = new Layer(this);
+    layer->get_ui()->text_url->installEventFilter(this);
+
+    this->installEventFilter(this);
 }
 
 Browser::~Browser()
@@ -82,35 +83,43 @@ void Browser::handler_view(int view_to_open)
 
 bool Browser::eventFilter(QObject *o, QEvent *e)
 {
-    if ((o == this) && (e->type() == QEvent::KeyPress)) {
+    if (e->type() == QEvent::KeyPress) {
         QKeyEvent *key = static_cast<QKeyEvent *>(e);
-        switch(key->key()) {
-            case Qt::Key_Left:
-                views[current_view]->back();
-                break;
-            case Qt::Key_Right:
-                views[current_view]->forward();
-                break;
-            case Qt::Key_Return:
-                if (layer->isVisible()) {
-                    if ((key->modifiers() == Qt::ShiftModifier) || (view == NULL))
-                        create_view();
-                    url.setUrl(layer->get_ui()->lineedit_url->text());
-                    views[current_view]->load_url(url);
-                    layer->set_visible(this);
-                } else {
+        if (o == this) {
+            switch(key->key()) {
+                case Qt::Key_Left:
+                    views[current_view]->back();
+                    break;
+                case Qt::Key_Right:
+                    views[current_view]->forward();
+                    break;
+                case Qt::Key_Return:
                     views[current_view]->reload();
-                }
-                break;
-            case Qt::Key_Q:
-                if (key->modifiers() == Qt::ControlModifier)
-                    close();
-                break;
-            default:
-                break;
+                    break;
+                case Qt::Key_Q:
+                    if (key->modifiers() == Qt::ControlModifier)
+                        close();
+                    break;
+                default:
+                    break;
+            }
+            if (key->modifiers() == Qt::MetaModifier)
+                layer->set_visible(this);
+        } else if (o == layer->get_ui()->text_url) {
+            switch(key->key()) {
+                case Qt::Key_Return:
+                    if (!layer->get_ui()->text_url->document()->toPlainText().simplified().isEmpty()) {
+                        if ((key->modifiers() == Qt::ShiftModifier) || (view == NULL))
+                            create_view();
+                        url.setUrl(layer->get_ui()->text_url->document()->toPlainText().simplified());
+                        views[current_view]->load_url(url);
+                        layer->set_visible(this);
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
-        if (key->modifiers() == Qt::MetaModifier)
-            layer->set_visible(this);
     }
     return QObject::eventFilter(o, e);
 }

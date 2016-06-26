@@ -5,8 +5,7 @@ Layer::Layer(QWidget *parent)
     , ui(new Ui::Layer)
 {
     ui->setupUi(this);
-
-    connect(ui->lineedit_url, SIGNAL(textChanged(QString)), this, SLOT(resizeLineEditUrl()));
+    connect(ui->text_url, SIGNAL(textChanged()), this, SLOT(resize_text_url()));
 }
 
 Layer::~Layer()
@@ -21,8 +20,11 @@ void Layer::set_url(QUrl &url)
     else
         ui->label_ssl->setPixmap(ui->pixmap_ssl);
 
-    ui->lineedit_url->setText(url.toString().replace(0, url.scheme().size()+3, ""));
-
+    QString host = url.host();
+    host.replace("www.", "", Qt::CaseInsensitive);
+    ui->text_url->setText("<font color=\"white\">"+host+"</font>"+"<font color=\"gray\">"+url.path()+url.fragment()+"</font>");
+    ui->text_url->setAlignment(Qt::AlignCenter);
+    ui->text_url->moveCursor(QTextCursor::End);
 }
 
 void Layer::set_visible(QWidget *widget_browser)
@@ -31,20 +33,20 @@ void Layer::set_visible(QWidget *widget_browser)
         this->setParent(NULL);
         this->setParent(widget_browser);
         this->setVisible(true);
-        ui->lineedit_url->setFocus();
+        ui->text_url->setFocus();
     } else {
         this->setHidden(true);
+        widget_browser->setFocus();
     }
 }
 
-void Layer::resizeLineEditUrl()
+void Layer::resize_text_url()
 {
-    QFont f("", 0);
-    QFontMetrics fm(f);
-    int pixelsWide = fm.width(ui->lineedit_url->text());
-    if (pixelsWide > 160)
-        ui->lineedit_url->setMinimumWidth(pixelsWide * 2.9);
+    if ((ui->text_url->document()->size().width()) > 400)
+        if (ui->text_url->document()->toPlainText().simplified().isEmpty())
+            ui->text_url->setMinimumWidth(500);
+        else
+            ui->text_url->setMinimumWidth(ui->text_url->document()->idealWidth() + 100);
     else
-        ui->lineedit_url->setMinimumWidth(500); // TODO: %
-    this->adjustSize();
+        ui->text_url->setMinimumWidth(500);
 }

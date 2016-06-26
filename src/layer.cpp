@@ -5,12 +5,36 @@ Layer::Layer(QWidget *parent)
     , ui(new Ui::Layer)
 {
     ui->setupUi(this);
+
     connect(ui->lineedit_url, SIGNAL(textChanged(QString)), this, SLOT(resizeLineEditUrl()));
 }
 
 Layer::~Layer()
 {
     delete ui;
+}
+
+void Layer::set_url(QUrl &url)
+{
+    if (url.scheme() == "http")
+        ui->label_ssl->setPixmap(ui->pixmap_ssl_off);
+    else
+        ui->label_ssl->setPixmap(ui->pixmap_ssl);
+
+    ui->lineedit_url->setText(url.toString().replace(0, url.scheme().size()+3, ""));
+
+}
+
+void Layer::set_visible(QWidget *widget_browser)
+{
+    if (this->isHidden()) {
+        this->setParent(NULL);
+        this->setParent(widget_browser);
+        this->setVisible(true);
+        ui->lineedit_url->setFocus();
+    } else {
+        this->setHidden(true);
+    }
 }
 
 void Layer::resizeLineEditUrl()

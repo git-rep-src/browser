@@ -16,7 +16,10 @@ public:
     ~Layer();
 
 public slots:
-    Ui::Layer *get_ui_object() { return ui; }
+    void set_url(QUrl &url);
+    void set_visible(QWidget *widget_browser);
+
+    Ui::Layer *get_ui() { return ui; }
 
 private:
     Ui::Layer *ui;

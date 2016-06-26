@@ -59,6 +59,7 @@ public:
         layout_main = new QVBoxLayout(Browser);
         layout_main->setSpacing(0);
         layout_main->setMargin(0);
+        layout_main->insertWidget(1, progressbar);
 
         Browser->setPalette(palette);
         Browser->setLayout(layout_main);

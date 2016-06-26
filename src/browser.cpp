@@ -6,21 +6,20 @@ Browser::Browser(QWidget *parent)
     , layer(NULL)
     , row(0)
     , col(0)
-    , current(0)
+    , current_view(0)
     , ui(new Ui::Browser)
 {
     ui->setupUi(this);
-    ui->mainLayout->insertWidget(1, ui->progressBar);
 
     this->installEventFilter(this);
 
-    create_layer();
+    layer = new Layer(this);
 }
 
 Browser::~Browser()
 {
     for (uint i = 1; i <= views.size(); i++)
-        if(views[i - 1] != NULL)
+        if (views[i - 1] != NULL)
             delete views[i - 1];
     delete layer;
     delete ui;
@@ -28,91 +27,57 @@ Browser::~Browser()
 
 void Browser::create_view()
 {
-    view = new View;
-    QObject::connect(view, &View::loadStarted, [&] { ui->progressBar->show(); });
-    QObject::connect(view, &View::loadProgress, [&] (int p) { ui->progressBar->setValue(p); });
-    QObject::connect(view, &View::loadFinished, [&] { ui->progressBar->setValue(100); ui->progressBar->hide(); });
-    QObject::connect(view, &View::renderProcessTerminated, [&]
-                    (QWebEnginePage::RenderProcessTerminationStatus termStatus, int statusCode) {
-        switch (termStatus) {
-            case QWebEnginePage::NormalTerminationStatus:
-                qDebug() << "Render process normal exit" << "CODE: " << statusCode;
-                break;
-            case QWebEnginePage::AbnormalTerminationStatus:
-                qDebug() << "Render process abnormal exit" << "CODE: " << statusCode;
-                break;
-            case QWebEnginePage::CrashedTerminationStatus:
-                qDebug() << "Render process crashed" << "CODE: " << statusCode;
-                break;
-            case QWebEnginePage::KilledTerminationStatus:
-                qDebug() << "Render process killed" << "CODE: " << statusCode;
-                break;
-            default:
-                break;
-        }
-    });
+    view = new View(ui, layer);
 
     views.push_back(view);
     if (views.size() > 1)
         handler_view();
 
-    ui->mainLayout->insertWidget(0, views.back());
-    current = (views.size() - 1);
+    current_view = (views.size() - 1);
+
+    ui->layout_main->insertWidget(0, views.back());
 }
 
-void Browser::create_layer()
+void Browser::handler_view(int view_to_open)
 {
-    layer = new Layer;
-    layer->setParent(this);
-}
+    int cv = current_view;
 
-void Browser::handler_view(int offset, bool open)
-{
-    int c = current;
-    if ((row == 5) && !open) {
+    if ((row == 5) && (view_to_open != -1)) {
         row = 0;
         ++col;
     }
 
-    ui->mainLayout->removeWidget(views[c]);
-    views[c]->setMaximumSize(400, 250); // TODO: %
-    views[c]->setZoomFactor(0.40);
-    layer->get_ui_object()->layoutMiniatures->addWidget(views[c], col, row, Qt::AlignLeft);
-    views[c]->get_ui_object()->buttonMiniature->setParent(views[c]);
-    views[c]->get_ui_object()->buttonMiniature->show();
-    QObject::connect(views[c]->get_ui_object()->buttonMiniature, &ButtonMiniature::clicked, [=] {
-        views[c]->get_ui_object()->buttonMiniature->disconnect();
-        handler_view(c, true);
+    ui->layout_main->removeWidget(views[cv]);
+    layer->get_ui()->layout_miniatures->addWidget(views[cv], col, row, Qt::AlignLeft);
+    views[cv]->setMaximumSize(400, 250); // TODO: %
+    views[cv]->setZoomFactor(0.40);
+    views[cv]->get_ui()->button_miniature->setParent(views[cv]);
+    views[cv]->get_ui()->button_miniature->show();
+    connect(views[cv]->get_ui()->button_miniature, &ButtonMiniature::clicked, [=] {
+        views[cv]->get_ui()->button_miniature->disconnect();
+        handler_view(cv);
     });
-    QObject::connect(views[c]->get_ui_object()->buttonMiniatureClose, &QPushButton::released, [=] {
-        delete views[c];
-        views[c] = NULL;
+    connect(views[cv]->get_ui()->button_miniature_close, &QPushButton::released, [=] {
+        delete views[cv];
+        views[cv] = NULL;
     });
 
-    if (open) {
-        views[offset]->get_ui_object()->buttonMiniature->hide();
-        views[offset]->get_ui_object()->buttonMiniature->setParent(NULL);
-        layer->get_ui_object()->layoutMiniatures->removeWidget(views[offset]);
-        views[offset]->setMaximumSize(1920, 1080); // TODO: %
-        views[offset]->setZoomFactor(1.0);
-        ui->mainLayout->insertWidget(0, views[offset]);
-        current = offset;
-        handler_layer();
+    if (view_to_open != -1) {
+        layer->get_ui()->layout_miniatures->removeWidget(views[view_to_open]);
+        views[view_to_open]->get_ui()->button_miniature->hide();
+        views[view_to_open]->get_ui()->button_miniature->setParent(NULL);
+        views[view_to_open]->setMaximumSize(1920, 1080); // TODO: %
+        views[view_to_open]->setZoomFactor(1.0);
+        ui->layout_main->insertWidget(0, views[view_to_open]);
+
+        QUrl url = views[view_to_open]->url();
+        layer->set_url(url);
+
+        current_view = view_to_open;
+        layer->set_visible(this);
     }
 
     ++row;
-}
-
-void Browser::handler_layer()
-{
-    if (layer->isHidden()) {
-        layer->setParent(NULL);
-        layer->setParent(this);
-        layer->setVisible(true);
-        layer->get_ui_object()->lineEditUrl->setFocus();
-    } else {
-        layer->setHidden(true);
-    }
 }
 
 bool Browser::eventFilter(QObject *o, QEvent *e)
@@ -121,20 +86,20 @@ bool Browser::eventFilter(QObject *o, QEvent *e)
         QKeyEvent *key = static_cast<QKeyEvent *>(e);
         switch(key->key()) {
             case Qt::Key_Left:
-                view->back();
+                views[current_view]->back();
                 break;
             case Qt::Key_Right:
-                view->forward();
+                views[current_view]->forward();
                 break;
             case Qt::Key_Return:
                 if (layer->isVisible()) {
                     if ((key->modifiers() == Qt::ShiftModifier) || (view == NULL))
                         create_view();
-                    url.setUrl(layer->get_ui_object()->lineEditUrl->text());
-                    view->load_url(url);
-                    handler_layer();
+                    url.setUrl(layer->get_ui()->lineedit_url->text());
+                    views[current_view]->load_url(url);
+                    layer->set_visible(this);
                 } else {
-                    view->reload();
+                    views[current_view]->reload();
                 }
                 break;
             case Qt::Key_Q:
@@ -145,7 +110,7 @@ bool Browser::eventFilter(QObject *o, QEvent *e)
                 break;
         }
         if (key->modifiers() == Qt::MetaModifier)
-            handler_layer();
+            layer->set_visible(this);
     }
     return QObject::eventFilter(o, e);
 }

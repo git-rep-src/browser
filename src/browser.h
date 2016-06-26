@@ -32,15 +32,13 @@ private:
 
     int row;
     int col;
-    int current;
+    int current_view;
 
     Ui::Browser *ui;
 
 private slots:
     void create_view();
-    void create_layer();
-    void handler_view(int offset = 0, bool open = false);
-    void handler_layer();
+    void handler_view(int view_to_open = -1);
 };
 
 #endif // BROWSER_H

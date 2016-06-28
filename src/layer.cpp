@@ -6,6 +6,8 @@ Layer::Layer(QWidget *parent)
 {
     ui->setupUi(this);
     connect(ui->text_url, SIGNAL(textChanged()), this, SLOT(resize_text_url()));
+    connect(ui->text_url->document(), SIGNAL(contentsChange(int, int, int)), this
+            , SLOT(clean_up_color_text_url(int , int, int)));
 }
 
 Layer::~Layer()
@@ -22,7 +24,7 @@ void Layer::set_url(QUrl &url)
 
     QString host = url.host();
     host.replace("www.", "", Qt::CaseInsensitive);
-    ui->text_url->setText("<font color=\"white\">"+host+"</font>"+"<font color=\"gray\">"+url.path()+url.fragment()+"</font>");
+    ui->text_url->setHtml("<font color=\"white\">"+host+"</font>"+"<font color=\"gray\">"+url.path()+url.fragment()+"</font>");
     ui->text_url->setAlignment(Qt::AlignCenter);
     ui->text_url->moveCursor(QTextCursor::End);
 }
@@ -33,10 +35,22 @@ void Layer::set_visible(QWidget *widget_browser)
         this->setParent(NULL);
         this->setParent(widget_browser);
         this->setVisible(true);
+        ui->text_url->verticalScrollBar()->setValue(3);
         ui->text_url->setFocus();
     } else {
         this->setHidden(true);
         widget_browser->setFocus();
+    }
+}
+
+void Layer::clean_up_color_text_url(int p, int cr, int ca)
+{
+    Q_UNUSED(p);
+    if (cr > 1 && ca == 1) {
+        ui->text_url->selectAll();
+        ui->text_url->setTextColor(QColor(255, 255, 255));
+        ui->text_url->moveCursor(QTextCursor::End);
+        ui->text_url->document()->setTextWidth(399);
     }
 }
 

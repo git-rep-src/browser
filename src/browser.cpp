@@ -39,35 +39,43 @@ void Browser::create_view()
     ui->layout_main->insertWidget(0, views.back());
 }
 
-void Browser::handler_view(int view_to_open)
+void Browser::handler_view(int view_to_open, bool open)
 {
     int cv = current_view;
 
-    if ((row == 5) && (view_to_open != -1)) {
-        row = 0;
-        ++col;
+    if ((col == 4) && (!open)) {
+        col = 0;
+        ++row;
     }
 
     ui->layout_main->removeWidget(views[cv]);
-    layer->get_ui()->layout_miniatures->addWidget(views[cv], col, row, Qt::AlignLeft);
-    views[cv]->setMaximumSize(400, 250); // TODO: %
+    if (open) {
+        int i = layer->get_ui()->layout_miniatures->indexOf(views[view_to_open]);
+        int r, c, rs, cs;
+        layer->get_ui()->layout_miniatures->getItemPosition(i, &r, &c, &rs, &cs);
+        layer->get_ui()->layout_miniatures->addWidget(views[cv], r, c);
+    } else {
+        layer->get_ui()->layout_miniatures->addWidget(views[cv], row, col);
+    }
+    //views[cv]->setMaximumSize(400, 250); // TODO: %
     views[cv]->setZoomFactor(0.40);
     views[cv]->get_ui()->button_miniature->setParent(views[cv]);
     views[cv]->get_ui()->button_miniature->show();
     connect(views[cv]->get_ui()->button_miniature, &ButtonMiniature::clicked, [=] {
         views[cv]->get_ui()->button_miniature->disconnect();
-        handler_view(cv);
+        handler_view(cv, true);
     });
     connect(views[cv]->get_ui()->button_miniature_close, &QPushButton::released, [=] {
+        layer->get_ui()->layout_miniatures->removeWidget(views[cv]);
         delete views[cv];
         views[cv] = NULL;
     });
 
-    if (view_to_open != -1) {
+    if (open) {
         layer->get_ui()->layout_miniatures->removeWidget(views[view_to_open]);
         views[view_to_open]->get_ui()->button_miniature->hide();
         views[view_to_open]->get_ui()->button_miniature->setParent(NULL);
-        views[view_to_open]->setMaximumSize(1920, 1080); // TODO: %
+        //views[view_to_open]->setMaximumSize(1920, 1080); // TODO: %
         views[view_to_open]->setZoomFactor(1.0);
         ui->layout_main->insertWidget(0, views[view_to_open]);
 
@@ -78,7 +86,7 @@ void Browser::handler_view(int view_to_open)
         layer->set_visible(this);
     }
 
-    ++row;
+    ++col;
 }
 
 bool Browser::eventFilter(QObject *o, QEvent *e)

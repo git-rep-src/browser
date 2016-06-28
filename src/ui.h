@@ -8,6 +8,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QProgressBar>
+#include <QScrollBar>
 #include <QHBoxLayout>
 #include <QGridLayout>
 
@@ -44,11 +45,11 @@ public:
         QString style_progressbar = "QProgressBar { \
                                          background-color: rgb(10, 10, 10); \
                                          border: 0px; \
-                                    }"
+                                     }"
                                     "QProgressBar::chunk { \
                                          background-color: rgb(80, 80, 80); \
                                          width: 1px; \
-                                    }";
+                                     }";
 
         progressbar = new QProgressBar(Browser);
         progressbar->setStyleSheet(style_progressbar);
@@ -85,13 +86,12 @@ public:
 
         button_miniature = new ButtonMiniature;
         button_miniature->setPalette(palette);
-        button_miniature->setFixedSize(400, 300); // TODO: %
         button_miniature->setAutoFillBackground(true);
         button_miniature->setHidden(true);
 
         button_miniature_close = new QPushButton(QIcon(":/icon-close"), NULL);
         button_miniature_close->setParent(button_miniature);
-        button_miniature_close->move(373, 0);
+        //button_miniature_close->move(373, 0);
     }
 };
 
@@ -99,6 +99,7 @@ class Ui_Layer
 {
 public:
     QTextEdit *text_url;
+    QScrollBar *scrollbar_text_url;
     QPixmap pixmap_ssl;
     QPixmap pixmap_ssl_off;
     QLabel  *label_ssl;
@@ -141,16 +142,20 @@ public:
                                       padding-right: 50px; \
                                       border-radius: 12px; \
                                       border: 0px; \
-                                 }";
+                                  }";
+
+
+        scrollbar_text_url = new QScrollBar;
 
         text_url = new QTextEdit(Layer);
         text_url->setFont(font);
         text_url->setStyleSheet(style_text_url);
+        text_url->setVerticalScrollBar(scrollbar_text_url);
         text_url->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         text_url->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         text_url->setLineWrapMode(QTextEdit::NoWrap);
-        text_url->setMinimumWidth(500);//
-        text_url->setMaximumHeight(32);//
+        text_url->setMinimumWidth(500); // TODO: %
+        text_url->setMaximumHeight(32); // TODO: %
         text_url->setAlignment(Qt::AlignCenter);
 
         pixmap_ssl.load(":/icon-ssl");
@@ -165,7 +170,7 @@ public:
         layout->setMargin(10);
         layout->addSpacing(10); // TODO: %
         layout->addWidget(text_url, Qt::AlignTop, Qt::AlignHCenter);
-        layout->addStretch(1);
+        layout->addSpacing(10);
         layout->addLayout(layout_miniatures);
         layout->addStretch(1);
 

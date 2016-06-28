@@ -38,7 +38,7 @@ private:
 
 private slots:
     void create_view();
-    void handler_view(int view_to_open = -1);
+    void handler_view(int view_to_open = 0, bool open = false);
 };
 
 #endif // BROWSER_H

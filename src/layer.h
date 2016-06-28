@@ -25,6 +25,7 @@ private:
     Ui::Layer *ui;
 
 private slots:
+    void clean_up_color_text_url(int p, int cr, int ca);
     void resize_text_url();
 };
 

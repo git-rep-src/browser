@@ -144,7 +144,6 @@ public:
                                       border: 0px; \
                                   }";
 
-
         scrollbar_text_url = new QScrollBar;
 
         text_url = new QTextEdit(Layer);

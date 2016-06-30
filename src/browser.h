@@ -5,6 +5,7 @@
 #include "layer.h"
 #include "ui.h"
 
+#include <QApplication>
 #include <QEvent>
 #include <QKeyEvent>
 
@@ -33,12 +34,13 @@ private:
     int row;
     int col;
     int current_view;
+    bool is_link_to_miniature;
 
     Ui::Browser *ui;
 
 private slots:
-    void create_view();
-    void handler_view(int view_to_open = 0, bool open = false);
+    void create_view(QUrl url, bool is_link = false);
+    void handler_view(int view_to = 0, bool rotate = false, bool is_link = false);
 };
 
 #endif // BROWSER_H

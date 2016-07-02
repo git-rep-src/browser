@@ -119,6 +119,18 @@ bool Browser::eventFilter(QObject *o, QEvent *e)
                 case Qt::Key_Right:
                     views[current_view]->forward();
                     break;
+                case Qt::Key_Plus:
+                    if (key->modifiers() == Qt::ControlModifier)
+                        views[current_view]->setZoomFactor((views[current_view]->zoomFactor()) + 0.10);
+                    break;
+                case Qt::Key_Minus:
+                    if (key->modifiers() == Qt::ControlModifier)
+                        views[current_view]->setZoomFactor((views[current_view]->zoomFactor()) - 0.10);
+                    break;
+                case Qt::Key_0:
+                    if (key->modifiers() == Qt::ControlModifier)
+                        views[current_view]->setZoomFactor(1.0);
+                    break;
                 case Qt::Key_Return:
                     views[current_view]->reload();
                     break;
@@ -138,7 +150,7 @@ bool Browser::eventFilter(QObject *o, QEvent *e)
                 case Qt::Key_Return:
                     if (!layer->get_ui()->text_url->document()->toPlainText().simplified().isEmpty()) {
                         url.setUrl(layer->get_ui()->text_url->document()->toPlainText().simplified());
-                        if ((key->modifiers() == Qt::ShiftModifier) || (view == NULL))
+                        if ((key->modifiers() == Qt::ControlModifier) || (view == NULL))
                             create_view(url);
                         else
                             views[current_view]->load_url(url);

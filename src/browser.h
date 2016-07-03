@@ -31,8 +31,6 @@ private:
     QUrl url;
     std::vector<View *> views;
 
-    int row;
-    int col;
     int current_view;
     bool is_link_to_miniature;
 

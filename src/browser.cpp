@@ -4,8 +4,6 @@ Browser::Browser(QWidget *parent)
     : QWidget(parent)
     , view(NULL)
     , layer(NULL)
-    , row(0)
-    , col(0)
     , current_view(0)
     , is_link_to_miniature(false)
     , ui(new Ui::Browser)
@@ -62,21 +60,10 @@ void Browser::handler_view(int view_to, bool rotate, bool is_link)
         ui->layout_main->removeWidget(views[view_to_miniature]);
     }
 
-    if ((col == 4) && (!rotate)) {
-        col = 0;
-        ++row;
-    }
+    layer->get_ui()->layout_miniatures->addWidget(views[view_to_miniature]);
 
-    if (rotate) {
-        int i = layer->get_ui()->layout_miniatures->indexOf(views[view_to_open]);
-        int r, c, rs, cs;
-        layer->get_ui()->layout_miniatures->getItemPosition(i, &r, &c, &rs, &cs);
-        layer->get_ui()->layout_miniatures->addWidget(views[view_to_miniature], r, c);
-    } else {
-        layer->get_ui()->layout_miniatures->addWidget(views[view_to_miniature], row, col);
-    }
-    //views[view_to_miniature]->setMaximumSize(400, 250); // TODO: %
-    views[view_to_miniature]->setZoomFactor(0.40);
+    views[view_to_miniature]->setMaximumSize(300, 250); // TODO: %
+    views[view_to_miniature]->setZoomFactor(0.35);
     views[view_to_miniature]->get_ui()->button_miniature->setParent(views[view_to_miniature]);
     views[view_to_miniature]->get_ui()->button_miniature->show();
     connect(views[view_to_miniature]->get_ui()->button_miniature, &ButtonMiniature::clicked, [=] {
@@ -93,7 +80,7 @@ void Browser::handler_view(int view_to, bool rotate, bool is_link)
         layer->get_ui()->layout_miniatures->removeWidget(views[view_to_open]);
         views[view_to_open]->get_ui()->button_miniature->hide();
         views[view_to_open]->get_ui()->button_miniature->setParent(NULL);
-        //views[view_to_open]->setMaximumSize(1920, 1080); // TODO: %
+        views[view_to_open]->setMaximumSize(1920, 1080); // TODO: %
         views[view_to_open]->setZoomFactor(1.0);
         ui->layout_main->insertWidget(0, views[view_to_open]);
 
@@ -103,8 +90,6 @@ void Browser::handler_view(int view_to, bool rotate, bool is_link)
         current_view = view_to_open;
         layer->set_visible(this);
     }
-
-    ++col;
 }
 
 bool Browser::eventFilter(QObject *o, QEvent *e)
@@ -134,6 +119,12 @@ bool Browser::eventFilter(QObject *o, QEvent *e)
                 case Qt::Key_Return:
                     views[current_view]->reload();
                     break;
+                case Qt::Key_Escape:
+                    if (views.size() != 0) {
+                       delete views[current_view];
+                       views[current_view] = NULL; //FIX
+                    }
+                    break;
                 case Qt::Key_Q:
                     if (key->modifiers() == Qt::ControlModifier)
                         close();
@@ -150,10 +141,16 @@ bool Browser::eventFilter(QObject *o, QEvent *e)
                 case Qt::Key_Return:
                     if (!layer->get_ui()->text_url->document()->toPlainText().simplified().isEmpty()) {
                         url.setUrl(layer->get_ui()->text_url->document()->toPlainText().simplified());
-                        if ((key->modifiers() == Qt::ControlModifier) || (view == NULL))
+                        if ((key->modifiers() == Qt::ControlModifier) || (views.size() == 0)) {
                             create_view(url);
-                        else
-                            views[current_view]->load_url(url);
+                        } else {
+                            if (views.size() != 0) { //FIX
+                                if (views[current_view] == NULL)
+                                    create_view(url);
+                                else
+                                    views[current_view]->load_url(url);
+                            }
+                        }
                         layer->set_visible(this);
                     }
                     break;

@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file alias="icon-close">resources/images/global/close.svg</file>
+        <file alias="icon-delete">resources/images/global/delete.svg</file>
         <file alias="icon-ssl">resources/images/global/ssl.svg</file>
         <file alias="icon-ssl-off">resources/images/global/ssl-off.svg</file>
         <file>resources/images/global/icon.ico</file>

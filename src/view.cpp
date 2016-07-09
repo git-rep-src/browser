@@ -4,7 +4,7 @@
 
 View::View(Ui::Browser *ui_browser, Layer *layer, QWebEngineView *parent)
     : QWebEngineView(parent)
-    , update_layer_text_url(true)
+    , update_layer_url(true)
     , ui(new Ui::View)
 {
     ui->setupUi();
@@ -13,11 +13,11 @@ View::View(Ui::Browser *ui_browser, Layer *layer, QWebEngineView *parent)
     this->page()->settings()->setAttribute(QWebEngineSettings::JavascriptEnabled, false);
     this->page()->settings()->setAttribute(QWebEngineSettings::PluginsEnabled, false);
 
-    connect(this, &QWebEngineView::loadStarted, [=] { ui_browser->progressbar->show(); });
-    connect(this, &QWebEngineView::loadProgress, [=] (int p) { ui_browser->progressbar->setValue(p); });
-    connect(this, &QWebEngineView::loadFinished, [=] { ui_browser->progressbar->hide(); });
+    connect(this, &QWebEngineView::loadStarted, [=] { ui_browser->pb_page->show(); });
+    connect(this, &QWebEngineView::loadProgress, [=] (int p) { ui_browser->pb_page->setValue(p); });
+    connect(this, &QWebEngineView::loadFinished, [=] { ui_browser->pb_page->hide(); });
     connect(this, &QWebEngineView::urlChanged, [=] (QUrl url) {
-        if (update_layer_text_url)
+        if (update_layer_url)
             layer->set_url(url);
     });
     connect(&this->webpage, &WebPage::link_clicked, [&] (QUrl url) { emit link_clicked(url); });
@@ -30,7 +30,7 @@ View::~View()
 
 void View::load_url(QUrl &url, bool update)
 {
-    update_layer_text_url = update;
+    update_layer_url = update;
 
     if (url.isValid()) {
         if (url.scheme().isEmpty())

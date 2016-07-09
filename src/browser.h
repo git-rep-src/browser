@@ -31,14 +31,16 @@ private:
     QUrl url;
     std::vector<View *> views;
 
-    int current_view;
-    bool is_link_to_miniature;
+    int current;
+    bool is_link_to_tab;
 
     Ui::Browser *ui;
 
 private slots:
     void create_view(QUrl url, bool is_link = false);
-    void handler_view(int view_to = 0, bool rotate = false, bool is_link = false);
+    void add_tab(int index = 0, bool rotate = false, bool is_link = false);
+    void delete_tab(int tab);
+    void open_tab(int tab);
 };
 
 #endif // BROWSER_H

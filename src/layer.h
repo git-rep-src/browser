@@ -17,7 +17,7 @@ public:
 
 public slots:
     void set_url(QUrl &url);
-    void set_visible(QWidget *widget_browser);
+    void set_visible(QWidget *w_browser);
 
     Ui::Layer *get_ui() { return ui; }
 
@@ -25,8 +25,8 @@ private:
     Ui::Layer *ui;
 
 private slots:
-    void clean_up_color_text_url(int p, int cr, int ca);
-    void resize_text_url();
+    void cleanup_color_url(int p, int cr, int ca);
+    void resize_url();
 };
 
 #endif // LAYER_H

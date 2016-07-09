@@ -27,7 +27,7 @@ public slots:
     Ui::View *get_ui() { return ui; }
 
 private:
-    bool update_layer_text_url;
+    bool update_layer_url;
     Ui::View *ui;
     WebPage webpage;
 };

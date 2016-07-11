@@ -1,0 +1,4 @@
+Reparar el array al borrar un miniatura.
+Al cerrar un view con Escape y abrir una nueva url, da error por que no crea un nuevo view. Revisar case Qt::Key_Return.
+
+QWebAction::OpenLinkInNewTab

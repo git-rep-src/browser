@@ -1,9 +1,9 @@
 #ifndef BROWSER_H
 #define BROWSER_H
 
+#include "ui.h"
 #include "view.h"
 #include "layer.h"
-#include "ui.h"
 
 #include <QApplication>
 #include <QEvent>
@@ -25,16 +25,15 @@ protected:
     bool eventFilter(QObject *o, QEvent *e);
 
 private:
+    Ui::Browser *ui;
     View *view;
     Layer *layer;
 
-    QUrl url;
-    std::vector<View *> views;
-
     int current;
     bool is_link_to_tab;
-
-    Ui::Browser *ui;
+    
+    QUrl url;
+    std::vector<View *> views;
 
 private slots:
     void create_view(QUrl url, bool is_link = false);

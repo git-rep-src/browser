@@ -7,8 +7,8 @@ Layer::Layer(QWidget *parent)
     ui->setupUi(this);
 
     connect(ui->te_url, SIGNAL(textChanged()), this, SLOT(resize_url()));
-    connect(ui->te_url->document(), SIGNAL(contentsChange(int, int, int)), this
-            , SLOT(cleanup_color_url(int , int, int)));
+    connect(ui->te_url->document(), SIGNAL(contentsChange(int, int, int)),
+            this, SLOT(cleanup_color_url(int , int, int)));
 }
 
 Layer::~Layer()

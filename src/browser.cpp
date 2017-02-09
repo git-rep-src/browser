@@ -1,12 +1,12 @@
 #include "browser.h"
 
-Browser::Browser(QWidget *parent)
-    : QWidget(parent)
-    , view(NULL)
-    , layer(NULL)
-    , current(0)
-    , is_link_to_tab(false)
-    , ui(new Ui::Browser)
+Browser::Browser(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::Browser),
+    view(NULL),
+    layer(NULL),
+    current(0),
+    is_link_to_tab(false)
 {
     ui->setupUi(this);
 
@@ -69,7 +69,7 @@ void Browser::add_tab(int index, bool rotate, bool is_link)
     views[self]->get_ui()->b_tab->show();
     views[self]->get_ui()->b_tab->disconnect();
     views[self]->get_ui()->b_tab_delete->disconnect();
-    connect(views[self]->get_ui()->b_tab, &ButtonMiniature::clicked, [=] {
+    connect(views[self]->get_ui()->b_tab, &ButtonTab::clicked, [=] {
         views[self]->get_ui()->b_tab->disconnect();
         add_tab(self, true);
     });
@@ -113,7 +113,7 @@ void Browser::delete_tab(int tab)
     for (uint i = tab; i < (views.size() - 1); i++) {
         views[i]->get_ui()->b_tab->disconnect();
         views[i]->get_ui()->b_tab_delete->disconnect();
-        connect(views[i]->get_ui()->b_tab, &ButtonMiniature::clicked, [=] {
+        connect(views[i]->get_ui()->b_tab, &ButtonTab::clicked, [=] {
             views[i]->get_ui()->b_tab->disconnect();
             add_tab(i, true);
         });

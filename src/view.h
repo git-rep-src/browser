@@ -1,9 +1,8 @@
 #ifndef VIEW_H
 #define VIEW_H
 
-#include "webpage.h"
-#include "layer.h"
 #include "ui.h"
+#include "layer.h"
 
 #include <QWebEngineView>
 
@@ -27,9 +26,9 @@ public slots:
     Ui::View *get_ui() { return ui; }
 
 private:
-    bool update_layer_url;
     Ui::View *ui;
-    WebPage webpage;
+    
+    bool update_layer_url;
 };
 
 #endif // VIEW_H

@@ -2,14 +2,14 @@
 
 #include <QWebEngineSettings>
 
-View::View(Ui::Browser *ui_browser, Layer *layer, QWebEngineView *parent)
-    : QWebEngineView(parent)
-    , update_layer_url(true)
-    , ui(new Ui::View)
+View::View(Ui::Browser *ui_browser, Layer *layer, QWebEngineView *parent) :
+    QWebEngineView(parent),
+    ui(new Ui::View),
+    update_layer_url(true)
 {
     ui->setupUi();
 
-    this->setPage(&webpage);
+    //this->setPage(&webpage);
     this->page()->settings()->setAttribute(QWebEngineSettings::JavascriptEnabled, false);
     this->page()->settings()->setAttribute(QWebEngineSettings::PluginsEnabled, false);
 
@@ -20,7 +20,7 @@ View::View(Ui::Browser *ui_browser, Layer *layer, QWebEngineView *parent)
         if (update_layer_url)
             layer->set_url(url);
     });
-    connect(&this->webpage, &WebPage::link_clicked, [&] (QUrl url) { emit link_clicked(url); });
+    //connect(&this->webpage, &WebPage::link_clicked, [&] (QUrl url) { emit link_clicked(url); });
 }
 
 View::~View()

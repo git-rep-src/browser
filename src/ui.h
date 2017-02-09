@@ -73,7 +73,7 @@ public:
 class Ui_View
 {
 public:
-    ButtonMiniature *b_tab;
+    ButtonTab *b_tab;
     QPushButton *b_tab_delete;
 
     void setupUi()
@@ -84,14 +84,14 @@ public:
         p.setBrush(QPalette::Active, QPalette::Base, br_yellow);
         p.setBrush(QPalette::Active, QPalette::Window, br_yellow);
 
-        b_tab = new ButtonMiniature;
+        b_tab = new ButtonTab;
         b_tab->setPalette(p);
         b_tab->setAutoFillBackground(true);
         b_tab->setHidden(true);
 
         b_tab_delete = new QPushButton(QIcon(":/icon-delete"), NULL);
         b_tab_delete->setParent(b_tab);
-        b_tab_delete->setHidden(true);
+        //b_tab_delete->setHidden(true);
     }
 };
 

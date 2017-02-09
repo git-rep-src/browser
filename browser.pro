@@ -11,7 +11,6 @@ SOURCES += src/main.cpp \
 
 HEADERS  += src/browser.h \
             src/view.h \
-            src/webpage.h \
             src/layer.h \
             src/ui.h \
             src/buttontab.h
@@ -19,3 +18,7 @@ HEADERS  += src/browser.h \
 RESOURCES = resources.qrc
 
 RC_FILE = resources/images/global/icon.rc
+
+OBJECTS_DIR = .build/.obj
+MOC_DIR = .build/.moc
+RCC_DIR = .build/.rcc

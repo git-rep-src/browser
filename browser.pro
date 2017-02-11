@@ -3,17 +3,17 @@ QT += core gui webenginewidgets
 TARGET = browser
 TEMPLATE = app
 
-SOURCES += src/main.cpp \
-           src/browser.cpp \
-           src/view.cpp \
-           src/layer.cpp \
-           src/buttontab.cpp
+SOURCES += src/main.cc \
+           src/browser.cc \
+           src/view.cc \
+           src/layer.cc \
+           src/tabbutton.cc
 
 HEADERS  += src/browser.h \
             src/view.h \
             src/layer.h \
             src/ui.h \
-            src/buttontab.h
+            src/tabbutton.h
 
 RESOURCES = resources.qrc
 

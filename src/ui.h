@@ -1,7 +1,7 @@
 #ifndef UI_H
 #define UI_H
 
-#include "buttontab.h"
+#include "tabbutton.h"
 
 #include <QWebEngineView>
 #include <QTextEdit>
@@ -17,227 +17,230 @@ QT_BEGIN_NAMESPACE
 class Ui_Browser
 {
 public:
-    QProgressBar *pb_page;
-    QVBoxLayout *l_main;
+    QProgressBar *page_progressbar;
+    QVBoxLayout *main_layout;
 
     void setupUi(QWidget *Browser)
     {
-        QBrush br_base(QColor(255, 255, 255, 255));
-        QBrush br_white(QColor(255, 255, 255, 255));
-        QBrush br_black(QColor(0, 0, 0, 255));
+        QBrush brush_base(QColor(255, 255, 255, 255));
+        QBrush brush_white(QColor(255, 255, 255, 255));
+        QBrush brush_black(QColor(0, 0, 0, 255));
 
-        QPalette p;
-        p.setBrush(QPalette::Active, QPalette::Base, br_base);
-        p.setBrush(QPalette::Active, QPalette::Window, br_base);
-        p.setBrush(QPalette::Active, QPalette::WindowText, br_white);
-        p.setBrush(QPalette::Active, QPalette::Text, br_white);
-        p.setBrush(QPalette::Active, QPalette::Highlight, br_black);
-        p.setBrush(QPalette::Active, QPalette::Button, br_base);
-        p.setBrush(QPalette::Active, QPalette::ButtonText, br_white);
-        p.setBrush(QPalette::Disabled, QPalette::Base, br_base);
-        p.setBrush(QPalette::Disabled, QPalette::Window, br_base);
-        p.setBrush(QPalette::Disabled, QPalette::WindowText, br_black);
-        p.setBrush(QPalette::Disabled, QPalette::Text, br_black);
-        p.setBrush(QPalette::Disabled, QPalette::Highlight, br_base);
-        p.setBrush(QPalette::Disabled, QPalette::Button, br_base);
-        p.setBrush(QPalette::Disabled, QPalette::ButtonText, br_black);
+        QPalette palette;
+        palette.setBrush(QPalette::Active, QPalette::Base, brush_base);
+        palette.setBrush(QPalette::Active, QPalette::Window, brush_base);
+        palette.setBrush(QPalette::Active, QPalette::WindowText, brush_white);
+        palette.setBrush(QPalette::Active, QPalette::Text, brush_white);
+        palette.setBrush(QPalette::Active, QPalette::Highlight, brush_black);
+        palette.setBrush(QPalette::Active, QPalette::Button, brush_base);
+        palette.setBrush(QPalette::Active, QPalette::ButtonText, brush_white);
+        palette.setBrush(QPalette::Disabled, QPalette::Base, brush_base);
+        palette.setBrush(QPalette::Disabled, QPalette::Window, brush_base);
+        palette.setBrush(QPalette::Disabled, QPalette::WindowText, brush_black);
+        palette.setBrush(QPalette::Disabled, QPalette::Text, brush_black);
+        palette.setBrush(QPalette::Disabled, QPalette::Highlight, brush_base);
+        palette.setBrush(QPalette::Disabled, QPalette::Button, brush_base);
+        palette.setBrush(QPalette::Disabled, QPalette::ButtonText, brush_black);
 
-        QString ss_pb_page = "QProgressBar { \
-                                  background-color: rgb(10, 10, 10); \
-                                  border: 0px; \
-                             }"
-                             "QProgressBar::chunk { \
-                                  background-color: rgb(80, 80, 80); \
-                                  width: 1px; \
-                             }";
+        QString page_progressbar_stylesheet =
+            "QProgressBar { \
+             background-color: rgb(10, 10, 10); \
+             border: 0px; \
+            }"
+            "QProgressBar::chunk { \
+             background-color: rgb(100, 100, 100); \
+             width: 1px; \
+            }";
 
-        pb_page = new QProgressBar(Browser);
-        pb_page->setStyleSheet(ss_pb_page);
-        pb_page->setFixedHeight(5);
-        pb_page->setMinimum(0);
-        pb_page->setMaximum(100);
-        pb_page->setValue(0);
-        pb_page->setTextVisible(false);
-        pb_page->setHidden(true);
+        page_progressbar = new QProgressBar(Browser);
+        page_progressbar->setStyleSheet(page_progressbar_stylesheet);
+        page_progressbar->setFixedHeight(5);
+        page_progressbar->setMinimum(0);
+        page_progressbar->setMaximum(100);
+        page_progressbar->setValue(0);
+        page_progressbar->setTextVisible(false);
+        page_progressbar->setHidden(true);
 
-        l_main = new QVBoxLayout(Browser);
-        l_main->setSpacing(0);
-        l_main->setMargin(0);
-        l_main->insertWidget(1, pb_page);
+        main_layout = new QVBoxLayout(Browser);
+        main_layout->setSpacing(0);
+        main_layout->setMargin(0);
+        main_layout->insertWidget(1, page_progressbar);
 
-        Browser->setPalette(p);
-        Browser->setLayout(l_main);
+        Browser->setPalette(palette);
+        Browser->setLayout(main_layout);
     }
 };
 
 class Ui_View
 {
 public:
-    ButtonTab *b_tab;
-    QPushButton *b_tab_delete;
+    ButtonTab *tab_button;
+    QPushButton *tab_delete_button;
 
     void setupUi()
     {
-        QBrush br_yellow(QColor(0, 0, 0, 70));
+        QBrush brush(QColor(0, 0, 0, 0));
 
-        QPalette p;
-        p.setBrush(QPalette::Active, QPalette::Base, br_yellow);
-        p.setBrush(QPalette::Active, QPalette::Window, br_yellow);
+        QPalette palette;
+        palette.setBrush(QPalette::Active, QPalette::Base, brush);
+        palette.setBrush(QPalette::Active, QPalette::Window, brush);
 
-        b_tab = new ButtonTab;
-        b_tab->setPalette(p);
-        b_tab->setAutoFillBackground(true);
-        b_tab->setHidden(true);
+        tab_button = new ButtonTab;
+        tab_button->setPalette(palette);
+        tab_button->setAutoFillBackground(true);
+        tab_button->setHidden(true);
 
-        b_tab_delete = new QPushButton(QIcon(":/icon-delete"), NULL);
-        b_tab_delete->setParent(b_tab);
-        //b_tab_delete->setHidden(true);
+        tab_delete_button = new QPushButton(QIcon(":/icon-delete"), NULL);
+        tab_delete_button->setParent(tab_button);
+        //tab_delete_button->setHidden(true);
     }
 };
 
 class Ui_Layer
 {
 public:
-    QTextEdit *te_url;
-    QScrollBar *sb_url;
-    QPixmap pm_ssl;
-    QPixmap pm_ssl_off;
-    QLabel  *lb_ssl;
-    QWidget *w_url;
-    QWidget *w_tabs;
-    QHBoxLayout *l_url;
-    QHBoxLayout *l_tabs;
-    QVBoxLayout *l;
+    QTextEdit *url_textedit;
+    QScrollBar *url_scrollbar;
+    QPixmap ssl_pixmap;
+    QPixmap no_ssl_pixmap;
+    QLabel  *ssl_label;
+    QWidget *url_widget;
+    QWidget *tabs_widget;
+    QHBoxLayout *url_hlayout;
+    QHBoxLayout *tabs_hlayout;
+    QVBoxLayout *layout;
 
     void setupUi(QWidget *Layer)
     {
-        QFont f("helvetica");
-        f.setPointSize(16); // TODO: %
-        f.setCapitalization(QFont::AllUppercase);
-        f.setBold(true);
+        QFont font("helvetica");
+        font.setPointSize(14); // TODO: %
+        font.setCapitalization(QFont::AllUppercase);
+        font.setBold(true);
 
-        QBrush br_base(QColor(255, 255, 255, 180));
-        QBrush br_widget_url(QColor(15, 15, 15, 255));
-        QBrush br_widget_tab(QColor(15, 15, 15, 255));
-        QBrush br_white(QColor(255, 255, 255, 255));
-        QBrush br_black(QColor(0, 0, 0, 255));
+        QBrush brush_base(QColor(255, 255, 255, 180));
+        QBrush url_widget_brush(QColor(0, 0, 0, 255));
+        QBrush tab_widget_brush(QColor(0, 0, 0, 255));
+        QBrush brush_white(QColor(255, 255, 255, 255));
+        QBrush brush_black(QColor(0, 0, 0, 255));
 
-        QPalette p;
-        p.setBrush(QPalette::Active, QPalette::Base, br_base);
-        p.setBrush(QPalette::Active, QPalette::Window, br_base);
-        p.setBrush(QPalette::Active, QPalette::WindowText, br_white);
-        p.setBrush(QPalette::Active, QPalette::Text, br_white);
-        p.setBrush(QPalette::Active, QPalette::Highlight, br_black);
-        p.setBrush(QPalette::Active, QPalette::Button, br_base);
-        p.setBrush(QPalette::Active, QPalette::ButtonText, br_white);
-        p.setBrush(QPalette::Disabled, QPalette::Base, br_base);
-        p.setBrush(QPalette::Disabled, QPalette::Window, br_base);
-        p.setBrush(QPalette::Disabled, QPalette::WindowText, br_black);
-        p.setBrush(QPalette::Disabled, QPalette::Text, br_black);
-        p.setBrush(QPalette::Disabled, QPalette::Highlight, br_black);
-        p.setBrush(QPalette::Disabled, QPalette::Button, br_base);
-        p.setBrush(QPalette::Disabled, QPalette::ButtonText, br_black);
+        QPalette palette;
+        palette.setBrush(QPalette::Active, QPalette::Base, brush_base);
+        palette.setBrush(QPalette::Active, QPalette::Window, brush_base);
+        palette.setBrush(QPalette::Active, QPalette::WindowText, brush_white);
+        palette.setBrush(QPalette::Active, QPalette::Text, brush_white);
+        palette.setBrush(QPalette::Active, QPalette::Highlight, brush_black);
+        palette.setBrush(QPalette::Active, QPalette::Button, brush_base);
+        palette.setBrush(QPalette::Active, QPalette::ButtonText, brush_white);
+        palette.setBrush(QPalette::Disabled, QPalette::Base, brush_base);
+        palette.setBrush(QPalette::Disabled, QPalette::Window, brush_base);
+        palette.setBrush(QPalette::Disabled, QPalette::WindowText, brush_black);
+        palette.setBrush(QPalette::Disabled, QPalette::Text, brush_black);
+        palette.setBrush(QPalette::Disabled, QPalette::Highlight, brush_black);
+        palette.setBrush(QPalette::Disabled, QPalette::Button, brush_base);
+        palette.setBrush(QPalette::Disabled, QPalette::ButtonText, brush_black);
 
-        QPalette p_widget_url;
-        p_widget_url.setBrush(QPalette::Active, QPalette::Base, br_widget_url);
-        p_widget_url.setBrush(QPalette::Active, QPalette::Window, br_widget_url);
-        p_widget_url.setBrush(QPalette::Active, QPalette::WindowText, br_white);
-        p_widget_url.setBrush(QPalette::Active, QPalette::Text, br_white);
-        p_widget_url.setBrush(QPalette::Active, QPalette::Highlight, br_black);
-        p_widget_url.setBrush(QPalette::Active, QPalette::Button, br_widget_url);
-        p_widget_url.setBrush(QPalette::Active, QPalette::ButtonText, br_white);
-        p_widget_url.setBrush(QPalette::Disabled, QPalette::Base, br_widget_url);
-        p_widget_url.setBrush(QPalette::Disabled, QPalette::Window, br_widget_url);
-        p_widget_url.setBrush(QPalette::Disabled, QPalette::WindowText, br_black);
-        p_widget_url.setBrush(QPalette::Disabled, QPalette::Text, br_black);
-        p_widget_url.setBrush(QPalette::Disabled, QPalette::Highlight, br_black);
-        p_widget_url.setBrush(QPalette::Disabled, QPalette::Button, br_widget_url);
-        p_widget_url.setBrush(QPalette::Disabled, QPalette::ButtonText, br_black);
+        QPalette url_widget_palette;
+        url_widget_palette.setBrush(QPalette::Active, QPalette::Base, url_widget_brush);
+        url_widget_palette.setBrush(QPalette::Active, QPalette::Window, url_widget_brush);
+        url_widget_palette.setBrush(QPalette::Active, QPalette::WindowText, brush_white);
+        url_widget_palette.setBrush(QPalette::Active, QPalette::Text, brush_white);
+        url_widget_palette.setBrush(QPalette::Active, QPalette::Highlight, brush_black);
+        url_widget_palette.setBrush(QPalette::Active, QPalette::Button, url_widget_brush);
+        url_widget_palette.setBrush(QPalette::Active, QPalette::ButtonText, brush_white);
+        url_widget_palette.setBrush(QPalette::Disabled, QPalette::Base, url_widget_brush);
+        url_widget_palette.setBrush(QPalette::Disabled, QPalette::Window, url_widget_brush);
+        url_widget_palette.setBrush(QPalette::Disabled, QPalette::WindowText, brush_black);
+        url_widget_palette.setBrush(QPalette::Disabled, QPalette::Text, brush_black);
+        url_widget_palette.setBrush(QPalette::Disabled, QPalette::Highlight, brush_black);
+        url_widget_palette.setBrush(QPalette::Disabled, QPalette::Button, url_widget_brush);
+        url_widget_palette.setBrush(QPalette::Disabled, QPalette::ButtonText, brush_black);
 
-        QPalette p_widget_tab;
-        p_widget_tab.setBrush(QPalette::Active, QPalette::Base, br_widget_tab);
-        p_widget_tab.setBrush(QPalette::Active, QPalette::Window, br_widget_tab);
-        p_widget_tab.setBrush(QPalette::Active, QPalette::WindowText, br_white);
-        p_widget_tab.setBrush(QPalette::Active, QPalette::Text, br_white);
-        p_widget_tab.setBrush(QPalette::Active, QPalette::Highlight, br_black);
-        p_widget_tab.setBrush(QPalette::Active, QPalette::Button, br_widget_tab);
-        p_widget_tab.setBrush(QPalette::Active, QPalette::ButtonText, br_white);
-        p_widget_tab.setBrush(QPalette::Disabled, QPalette::Base, br_widget_tab);
-        p_widget_tab.setBrush(QPalette::Disabled, QPalette::Window, br_widget_tab);
-        p_widget_tab.setBrush(QPalette::Disabled, QPalette::WindowText, br_black);
-        p_widget_tab.setBrush(QPalette::Disabled, QPalette::Text, br_black);
-        p_widget_tab.setBrush(QPalette::Disabled, QPalette::Highlight, br_black);
-        p_widget_tab.setBrush(QPalette::Disabled, QPalette::Button, br_widget_tab);
-        p_widget_tab.setBrush(QPalette::Disabled, QPalette::ButtonText, br_black);
+        QPalette tab_widget_palette;
+        tab_widget_palette.setBrush(QPalette::Active, QPalette::Base, tab_widget_brush);
+        tab_widget_palette.setBrush(QPalette::Active, QPalette::Window, tab_widget_brush);
+        tab_widget_palette.setBrush(QPalette::Active, QPalette::WindowText, brush_white);
+        tab_widget_palette.setBrush(QPalette::Active, QPalette::Text, brush_white);
+        tab_widget_palette.setBrush(QPalette::Active, QPalette::Highlight, brush_black);
+        tab_widget_palette.setBrush(QPalette::Active, QPalette::Button, tab_widget_brush);
+        tab_widget_palette.setBrush(QPalette::Active, QPalette::ButtonText, brush_white);
+        tab_widget_palette.setBrush(QPalette::Disabled, QPalette::Base, tab_widget_brush);
+        tab_widget_palette.setBrush(QPalette::Disabled, QPalette::Window, tab_widget_brush);
+        tab_widget_palette.setBrush(QPalette::Disabled, QPalette::WindowText, brush_black);
+        tab_widget_palette.setBrush(QPalette::Disabled, QPalette::Text, brush_black);
+        tab_widget_palette.setBrush(QPalette::Disabled, QPalette::Highlight, brush_black);
+        tab_widget_palette.setBrush(QPalette::Disabled, QPalette::Button, tab_widget_brush);
+        tab_widget_palette.setBrush(QPalette::Disabled, QPalette::ButtonText, brush_black);
 
-        QString ss_url = "QTextEdit { \
-                              color: rgb(255, 255, 255); \
-                              background: rgba(40, 40, 40, 255); \
-                              selection-color: rgba(80, 80, 80, 255); \
-                              selection-background-color: rgba(0, 0, 0, 0); \
-                              padding-left: 50px; \
-                              padding-right: 50px; \
-                              border-radius: 12px; \
-                              border: 0px; \
-                         }";
+        QString url_stylesheet =
+            "QTextEdit { \
+             color: rgb(255, 255, 255); \
+             background: rgba(20, 20, 20, 100); \
+             selection-color: rgba(80, 80, 80, 255); \
+             selection-background-color: rgba(0, 0, 0, 0); \
+             padding-left: 50px; \
+             padding-right: 50px; \
+             border-radius: 12px; \
+             border: 0px; \
+            }";
 
-        l_url = new QHBoxLayout;
-        l_url->setMargin(0);
-        l_url->setContentsMargins(0, 10, 0, 10);
-        l_url->setAlignment(Qt::AlignCenter);
+        url_hlayout = new QHBoxLayout;
+        url_hlayout->setMargin(0);
+        url_hlayout->setContentsMargins(0, 10, 0, 10); // TODO: %
+        url_hlayout->setAlignment(Qt::AlignCenter);
 
-        w_url = new QWidget(Layer);
-        w_url->setPalette(p_widget_url);
-        w_url->setAutoFillBackground(true);
-        w_url->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-        w_url->setLayout(l_url);
 
-        sb_url = new QScrollBar;
+        url_widget = new QWidget(Layer);
+        url_widget->setPalette(url_widget_palette);
+        url_widget->setAutoFillBackground(true);
+        url_widget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+        url_widget->setLayout(url_hlayout);
 
-        te_url = new QTextEdit(w_url);
-        te_url->setFont(f);
-        te_url->setStyleSheet(ss_url);
-        te_url->setMinimumWidth(500); // TODO: %
-        te_url->setMaximumHeight(32); // TODO: %
-        te_url->setLineWrapMode(QTextEdit::NoWrap);
-        te_url->setVerticalScrollBar(sb_url);
-        te_url->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        te_url->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        te_url->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-        te_url->setAlignment(Qt::AlignCenter);
+        url_scrollbar = new QScrollBar;
 
-        l_url->addWidget(te_url);
+        url_textedit = new QTextEdit(url_widget);
+        url_textedit->setFont(font);
+        url_textedit->setStyleSheet(url_stylesheet);
+        url_textedit->setMinimumWidth(500); // TODO: %
+        url_textedit->setMaximumHeight(32); // TODO: %
+        url_textedit->setLineWrapMode(QTextEdit::NoWrap);
+        url_textedit->setVerticalScrollBar(url_scrollbar);
+        url_textedit->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        url_textedit->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        url_textedit->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+        url_textedit->setAlignment(Qt::AlignCenter);
 
-        pm_ssl.load(":/icon-ssl");
-        pm_ssl_off.load(":/icon-ssl-off");
+        url_hlayout->addWidget(url_textedit);
 
-        lb_ssl = new QLabel(te_url);
-        lb_ssl->setPixmap(pm_ssl_off);
-        lb_ssl->move(8, 9.9); // TODO: %
+        ssl_pixmap.load(":/icon-ssl");
+        no_ssl_pixmap.load(":/icon-ssl-off");
 
-        l_tabs = new QHBoxLayout;
-        l_tabs->setMargin(0);
-        l_tabs->setSpacing(10);
-        l_tabs->setContentsMargins(10, 10, 10, 10);
-        l_tabs->setAlignment(Qt::AlignLeft);
+        ssl_label = new QLabel(url_textedit);
+        ssl_label->setPixmap(no_ssl_pixmap);
+        ssl_label->move(8, 10); // TODO: %
 
-        w_tabs= new QWidget(Layer);
-        w_tabs->setPalette(p_widget_tab);
-        w_tabs->setAutoFillBackground(true);
-        w_tabs->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-        w_tabs->setVisible(false);
-        w_tabs->setLayout(l_tabs);
+        tabs_hlayout = new QHBoxLayout;
+        tabs_hlayout->setMargin(0);
+        tabs_hlayout->setSpacing(10);
+        tabs_hlayout->setContentsMargins(10, 10, 10, 10);
+        tabs_hlayout->setAlignment(Qt::AlignLeft);
 
-        l = new QVBoxLayout(Layer);
-        l->setMargin(0);
-        l->addWidget(w_url);
-        l->addStretch(1);
-        l->addWidget(w_tabs);
+        tabs_widget= new QWidget(Layer);
+        tabs_widget->setPalette(tab_widget_palette);
+        tabs_widget->setAutoFillBackground(true);
+        tabs_widget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+        tabs_widget->setVisible(false);
+        tabs_widget->setLayout(tabs_hlayout);
 
-        Layer->setPalette(p);
+        layout = new QVBoxLayout(Layer);
+        layout->setMargin(0);
+        layout->addWidget(url_widget);
+        layout->addStretch(1);
+        layout->addWidget(tabs_widget);
+
+        Layer->setPalette(palette);
         Layer->setFixedSize(1920, 1080); // TODO: %
         Layer->setAutoFillBackground(true);
-        Layer->setLayout(l);
+        Layer->setLayout(layout);
     }
 };
 
